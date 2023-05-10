@@ -1,3 +1,7 @@
+module Solucion where
+main :: IO ()
+main = putStrLn "Hola, mundo!"
+
 -- Completar con los datos del grupo
 --
 -- Nombre de Grupo: xx
@@ -37,7 +41,7 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios redSocial| redSocialValida redSocial ==True =proyectarNombres(usuarios(redSocial))
+nombresDeUsuarios redSocial| redSocialValida redSocial == True = proyectarNombres(usuarios(redSocial))
 
 noHayIdsRepetidos :: [Usuario] -> Bool
 noHayIdsRepetidos [] = True
@@ -84,7 +88,7 @@ pertenece2 :: (Integer, Integer) -> [(Integer,Integer)] -> Bool
 pertenece2 a [] = False
 pertenece2 a (x:xs) | a == x = True 
                    | otherwise = pertenece2 a xs
-                   
+
 relacionesValidas :: [Usuario] -> [Relacion] -> Bool
 relacionesValidas [] (y:ys) = False
 relacionesValidas (x:xs) [] = True
@@ -153,7 +157,7 @@ redSocialValida :: RedSocial -> Bool
 redSocialValida ([], _, _) = False
 redSocialValida (_, [], _) = True
 redSocialValida (_, _, []) = True
-redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios ==True && relacionesValidas (usuarios) (relaciones) ==True && publicacionesValidas (usuarios) (publicaciones) ==True = True
+redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios == True && relacionesValidas (usuarios) (relaciones) == True && publicacionesValidas (usuarios) (publicaciones) == True = True
                                                       | otherwise = False
 proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
@@ -179,6 +183,14 @@ estaRobertoCarlos = undefined
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe = undefined
 
+todasLasPublicaciones :: [Publicacion] -> Usuario -> [Publicacion]
+todasLasPublicaciones [] (p,q) = []
+todasLasPublicaciones (x:xs) (p,q) | pertenece (p) (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicaciones xs (p,q)
+
+tripleValidacion :: RedSocial -> Usuario -> Bool
+tripleValidacion (usuarios, relaciones, publicaciones) (p,q) | redSocialValida (usuarios, relaciones, publicaciones) && usuarioValido (p,q) && pertenece p (hacerLista usuarios) = True
+                                                        | otherwise = False
+
 -- describir qué hace la función: .....
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA = undefined
@@ -190,6 +202,9 @@ lesGustanLasMismasPublicaciones = undefined
 -- describir qué hace la función: .....
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
 tieneUnSeguidorFiel = undefined
+--tieneUnSeguidorFiel (usuarios, relaciones, publicaciones) (p,q) | pertenece p hacerLista (usuarios) && pertenece 
+
+
 
 -- describir qué hace la función: .....
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
