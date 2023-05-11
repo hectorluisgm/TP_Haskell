@@ -160,6 +160,7 @@ redSocialValida (_, [], _) = True
 redSocialValida (_, _, []) = True
 redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios == True && relacionesValidas (usuarios) (relaciones) == True && publicacionesValidas (usuarios) (publicaciones) == True = True
                                                       | otherwise = False
+                                                      
 proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
 proyectarNombres (x:xs) =(snd(x):proyectarNombres(xs))
@@ -195,11 +196,17 @@ tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialVa
 
 -- describir qué hace la función: .....
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
-publicacionesQueLeGustanA = undefined
+publicacionesQueLeGustanA red usuario| redSocialValida red == True && usuarioValido usuario == True && perteneceUsuario usuario (usuarios red) == True = listapublicacionesDeLike (publicaciones (red)) usuario
+
+listapublicacionesDeLike:: [Publicacion] -> Usuario -> [Publicacion]
+listapublicacionesDeLike [] usuario = []
+listapublicacionesDeLike (x:xs) usuario| perteneceUsuario usuario (likesDePublicacion x) == True = (x: listapublicacionesDeLike xs usuario)
+                                       |otherwise =  listapublicacionesDeLike xs usuario
 
 -- describir qué hace la función: .....
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
-lesGustanLasMismasPublicaciones = undefined
+lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True && perteneceUsuario u2 (usuarios red) == True && publicacionesQueLeGustanA red u1 ==publicacionesQueLeGustanA red u2 = True
+                                         | otherwise = False
 
 -- describir qué hace la función: .....
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
