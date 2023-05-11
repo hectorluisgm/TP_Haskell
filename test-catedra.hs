@@ -48,7 +48,7 @@ publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
 
-publicacion2_1 = (usuario2, "Hello World", [usuario4])
+publicacion2_1 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
 
 publicacion3_1 = (usuario3, "Lorem Ipsum", [])
@@ -69,3 +69,5 @@ usuariosB = [usuario1, usuario2, usuario3, usuario5]
 relacionesB = [relacion1_2, relacion2_3]
 publicacionesB = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redB = (usuariosB, relacionesB, publicacionesB)
+
+-- todasLasPublicaciones [((1, "Juan"), "Este es mi primer post", [(2, "Natalia"), (4, "Mariela")]),((1, "Juan"), "Este es mi tercer post", [(2, "Natalia"), (5, "Natalia")]),((2, "Natalia"), "Good Bye World",[(1, "Juan"),(4, "Mariela")])] (2, "Natalia")

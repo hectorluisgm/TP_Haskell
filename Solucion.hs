@@ -41,7 +41,8 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios redSocial| redSocialValida redSocial == True = proyectarNombres(usuarios(redSocial))
+nombresDeUsuarios redSocial| redSocialValida redSocial ==False = error "Red Social no cumple los requisitos"
+                           | otherwise = proyectarNombres(usuarios(redSocial))
 
 noHayIdsRepetidos :: [Usuario] -> Bool
 noHayIdsRepetidos [] = True
@@ -144,9 +145,9 @@ perteneceString a (x:xs) | a == x = True
 
 noHayPublicacionesRepetidas :: [Publicacion] -> Bool
 noHayPublicacionesRepetidas [] = True
-noHayPublicacionesRepetidas ((usuario,publicacion,_):xs)| pertenece (idDeUsuario(usuario)) (hacerListaUsuariosPublicaciones(xs)) == True || perteneceString (publicacion) (hacerListaPublicaciones(xs)) ==True =False
-                                                        |otherwise = noHayPublicacionesRepetidas (xs) 
-
+noHayPublicacionesRepetidas ((usuario,publicacion,_):xs)| pertenece (idDeUsuario(usuario)) (hacerListaUsuariosPublicaciones(xs)) == True && perteneceString (publicacion) (hacerListaPublicaciones(xs)) ==True =False
+                                                        |otherwise = noHayPublicacionesRepetidas (xs)
+            
 publicacionesValidas :: [Usuario] -> [Publicacion] -> Bool
 publicacionesValidas (x:xs) [] = True
 publicacionesValidas [] (y:ys) = False
@@ -181,14 +182,15 @@ estaRobertoCarlos = undefined
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
-publicacionesDe = undefined
+publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) = todasLasPublicaciones publicaciones (id,nombre)
 
 todasLasPublicaciones :: [Publicacion] -> Usuario -> [Publicacion]
-todasLasPublicaciones [] (p,q) = []
-todasLasPublicaciones (x:xs) (p,q) | pertenece (p) (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicaciones xs (p,q)
+todasLasPublicaciones [] (_,_) = []
+todasLasPublicaciones (x:xs) (id,nombre) | id == head (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicaciones (xs) (id,nombre)
+                                            | otherwise = todasLasPublicaciones (xs) (id,nombre)
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
-tripleValidacion (usuarios, relaciones, publicaciones) (p,q) | redSocialValida (usuarios, relaciones, publicaciones) && usuarioValido (p,q) && pertenece p (hacerLista usuarios) = True
+tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialValida (usuarios, relaciones, publicaciones) && usuarioValido (id,nombre) && pertenece id (hacerLista usuarios) = True
                                                         | otherwise = False
 
 -- describir qué hace la función: .....
