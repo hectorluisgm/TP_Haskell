@@ -6,9 +6,11 @@ run = runTestTT testEJ
 
 testEJ = test [
     "todasLasPublicaciones 1" ~: todasLasPublicaciones publicacionesA usuario2 ~?= [publicacion2_1, publicacion2_2],
-    "publicacionesDe 1" ~: publicacionesDe redA usuario2 ~?= [publicacion2_1, publicacion2_2]
+    "publicacionesDe 1" ~: publicacionesDe redA usuario2 ~?= [publicacion2_1, publicacion2_2],
+    "cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
+    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False
  ]
-
+--    "usuarioConMasAmigos 1" ~:  usuarioConMasAmigos redA ~?= [usuario2, usuario4]
 usuario1 = (1, "Juan")
 usuario2 = (2, "Natalia")
 usuario3 = (3, "Pedro")

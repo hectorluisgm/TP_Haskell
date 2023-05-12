@@ -170,16 +170,40 @@ amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe = undefined
 
 -- describir qué hace la función: .....
-cantidadDeAmigos :: RedSocial -> Usuario -> Int
-cantidadDeAmigos = undefined
+cantidadDeAmigos :: RedSocial -> Usuario -> Integer
+cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == False && usuarioValido usuario == False && perteneceUsuario usuario us == False = error "RedSocial o Usuario No cumple con los requisitos"
+                                    | otherwise = auxCantidadDeAmigos (us,rs,ps) usuario 
+
+auxCantidadDeAmigos :: RedSocial -> Usuario -> Integer
+auxCantidadDeAmigos (_,rs,_) usuario = perteneceRelacionInt (idDeUsuario (usuario)) (hacerListaRelacion rs) 
+
+perteneceRelacionInt :: Integer -> [(Integer,Integer)] -> Integer
+perteneceRelacionInt a [] = 0 
+perteneceRelacionInt a (x:xs) | a == fst(x) || a == snd(x) = 1 + perteneceRelacionInt a xs 
+                                | otherwise = perteneceRelacionInt a xs 
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos = undefined
+usuarioConMasAmigos (us,rs,ps) = maximoDeAmigos (hacerListaAmigos (us,rs,ps) us)
+
+cantidadDeAmigosUsuario :: RedSocial -> Usuario -> (Usuario, Integer)
+cantidadDeAmigosUsuario red usuario = (usuario,cantidadDeAmigos red usuario)
+
+hacerListaAmigos ::  RedSocial -> [Usuario] ->  [(Usuario, Integer)]
+hacerListaAmigos red [] = []
+hacerListaAmigos red (x:xs) = cantidadDeAmigosUsuario red x : hacerListaAmigos red xs 
+
+maximoDeAmigos :: [(Usuario, Integer)] -> Usuario
+maximoDeAmigos [x] = fst x
+maximoDeAmigos (x:y:xs) | snd x > snd y = maximoDeAmigos (x:xs)
+                        | otherwise = maximoDeAmigos (y:xs)
 
 -- describir qué hace la función: .....
 estaRobertoCarlos :: RedSocial -> Bool
-estaRobertoCarlos = undefined
+estaRobertoCarlos ([],[],_) = False
+estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hacerListaAmigos (us,rs,ps) us)) > 10 = True
+                                | otherwise = False
+
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
@@ -191,7 +215,7 @@ todasLasPublicaciones (x:xs) (id,nombre) | id == head (hacerListaUsuariosPublica
                                             | otherwise = todasLasPublicaciones (xs) (id,nombre)
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
-tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialValida (usuarios, relaciones, publicaciones) && usuarioValido (id,nombre) && pertenece id (hacerLista usuarios) = True
+tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialValida (usuarios, relaciones, publicaciones) == True && usuarioValido (id,nombre) == True && pertenece id (hacerLista usuarios) == True = True
                                                         | otherwise = False
 
 -- describir qué hace la función: .....
