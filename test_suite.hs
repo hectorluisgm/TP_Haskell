@@ -27,7 +27,7 @@ publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
-
+--likesDePublicacion ((1, "Juan"), "Este es mi primer post", [(2, "Natalia"), (4, "Mariela")])
 publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
 

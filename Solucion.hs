@@ -183,12 +183,12 @@ estaRobertoCarlos = undefined
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
-publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) = todasLasPublicaciones publicaciones (id,nombre)
+publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) = todasLasPublicacionesDe publicaciones (id,nombre)
 
-todasLasPublicaciones :: [Publicacion] -> Usuario -> [Publicacion]
-todasLasPublicaciones [] (_,_) = []
-todasLasPublicaciones (x:xs) (id,nombre) | id == head (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicaciones (xs) (id,nombre)
-                                            | otherwise = todasLasPublicaciones (xs) (id,nombre)
+todasLasPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
+todasLasPublicacionesDe [] (_,_) = []
+todasLasPublicacionesDe (x:xs) (id,nombre) | id == head (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicacionesDe (xs) (id,nombre)
+                                            | otherwise = todasLasPublicacionesDe (xs) (id,nombre)
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
 tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialValida (usuarios, relaciones, publicaciones) && usuarioValido (id,nombre) && pertenece id (hacerLista usuarios) = True
@@ -211,7 +211,12 @@ lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuari
 -- describir qué hace la función: .....
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
 tieneUnSeguidorFiel = undefined
---tieneUnSeguidorFiel (usuarios, relaciones, publicaciones) (p,q) | pertenece p hacerLista (usuarios) && pertenece 
+--tieneUnSeguidorFiel (usuarios, relaciones, publicaciones) (id,nombre) | pertenece id hacerLista (usuarios) && pertenece 
+
+
+hacerListaLikes :: RedSocial -> Usuario -> [Usuario]
+hacerListaLikes (_,_,_) (_,_) = []
+--hacerListaLikes (usuarios,relaciones,publicaciones) (id,nombre) |  pertenece (idDeUsuario (head (usuarios))) (likesDePublicacion (head (publicacionesDe (usuarios,relaciones,publicaciones) (id,nombre)))) && idDeUsuario (head(usuarios)) /= id = head (usuarios)  : []
 
 
 
