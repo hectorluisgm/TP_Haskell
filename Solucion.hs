@@ -320,5 +320,5 @@ auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =aux
                              | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (drop 1(x:y:xs)) u1 u2
                              | x == u1 && terminaConDeUsuarios (y:xs) ==u2 = (x:y:xs)
 
-
+--prueba
 
