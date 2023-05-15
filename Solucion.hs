@@ -41,7 +41,7 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 nombresDeUsuarios :: RedSocial -> [String]
-nombresDeUsuarios redSocial| redSocialValida redSocial ==False = error "Red Social no cumple los requisitos"
+nombresDeUsuarios redSocial| redSocialValida redSocial == False = error "Red Social no cumple los requisitos"
                            | otherwise = proyectarNombres(usuarios(redSocial))
 
 noHayIdsRepetidos :: [Usuario] -> Bool
@@ -163,11 +163,34 @@ redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios
                                                       
 proyectarNombres :: [Usuario] -> [String]
 proyectarNombres [] = []
-proyectarNombres (x:xs) =(snd(x):proyectarNombres(xs))
+proyectarNombres (x:xs) = (snd(x):proyectarNombres(xs))
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe = undefined
+amigosDe (u, r, p) a = quitarRepetidos (listaDeAmigos (u, r, p) a)
+
+primerElemento :: Relacion -> Usuario
+primerElemento (x, xs) = x
+
+segundoElemento :: Relacion -> Usuario
+segundoElemento (x, xs) = xs
+
+listaDeAmigos :: RedSocial -> Usuario -> [Usuario]
+listaDeAmigos (u, [h], p) a = [amigo h a]
+listaDeAmigos (u, (x : xs), p) a | a == primerElemento x = (segundoElemento x : listaDeAmigos (u, (xs), p) a)
+                               | a == segundoElemento x = (primerElemento x : listaDeAmigos (u, (xs), p) a)
+                               | otherwise = listaDeAmigos (u, (xs), p) a
+
+amigo :: Relacion -> Usuario -> Usuario
+amigo (a) j | idDeUsuario (primerElemento (a)) == idDeUsuario j = segundoElemento (a)
+            | idDeUsuario (segundoElemento (a)) == idDeUsuario j = primerElemento (a)
+
+
+quitarRepetidos :: [Usuario] -> [Usuario]
+quitarRepetidos [a] = [a]
+quitarRepetidos (x:xs) | perteneceUsuario x xs == True = quitarRepetidos xs
+                       | otherwise = (x: quitarRepetidos xs )
+
 
 -- describir qué hace la función: .....
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
@@ -207,7 +230,8 @@ estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hace
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
-publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) = todasLasPublicacionesDe publicaciones (id,nombre)
+publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) | tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) == True = todasLasPublicacionesDe publicaciones (id,nombre)
+                                                                    |otherwise =  error "El usuario, relacion o publicacion estan mal definidas"
 
 todasLasPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
 todasLasPublicacionesDe [] (_,_) = []
@@ -215,7 +239,7 @@ todasLasPublicacionesDe (x:xs) (id,nombre) | id == head (hacerListaUsuariosPubli
                                             | otherwise = todasLasPublicacionesDe (xs) (id,nombre)
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
-tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | redSocialValida (usuarios, relaciones, publicaciones) == True && usuarioValido (id,nombre) == True && pertenece id (hacerLista usuarios) == True = True
+tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialValida (usuarios, relaciones, publicaciones) == True) && (usuarioValido (id,nombre) == True) && (pertenece id (hacerLista usuarios) == True) = True
                                                         | otherwise = False
 
 -- describir qué hace la función: .....
@@ -234,15 +258,26 @@ lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuari
 
 -- describir qué hace la función: .....
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
-tieneUnSeguidorFiel = undefined
---tieneUnSeguidorFiel (usuarios, relaciones, publicaciones) (id,nombre) | pertenece id hacerLista (usuarios) && pertenece 
+tieneUnSeguidorFiel (us,rs,ps) usuario | length (todasLasPublicacionesDe ps usuario) > 0 && usuarioMasRepetido (hacerListaDeLikes (todasLasPublicacionesDe (ps) usuario) usuario) == length (todasLasPublicacionesDe (ps) usuario) = True
+                                       | otherwise = False
+ 
+
+hacerListaDeLikes :: [Publicacion] -> Usuario -> [Usuario]
+hacerListaDeLikes [] u = []
+hacerListaDeLikes ((us, pub, like):xs) u| u == us = likesDePublicacion (us,pub,like)++hacerListaDeLikes xs u
+                                        | otherwise = hacerListaDeLikes xs u
+
+usuarioMasRepetido :: [Usuario] -> Int
+usuarioMasRepetido [] = error "Lista Vacia"
+usuarioMasRepetido [x] = 0
+usuarioMasRepetido (x:y:xs) | (nroDeRepeticiones (x:xs) x) >= (nroDeRepeticiones (x:xs) y) =  1 + usuarioMasRepetido (x:xs)
+                            | otherwise = usuarioMasRepetido (y:xs)
 
 
-hacerListaLikes :: RedSocial -> Usuario -> [Usuario]
-hacerListaLikes (_,_,_) (_,_) = []
---hacerListaLikes (usuarios,relaciones,publicaciones) (id,nombre) |  pertenece (idDeUsuario (head (usuarios))) (likesDePublicacion (head (publicacionesDe (usuarios,relaciones,publicaciones) (id,nombre)))) && idDeUsuario (head(usuarios)) /= id = head (usuarios)  : []
-
-
+nroDeRepeticiones :: [Usuario] -> Usuario -> Int
+nroDeRepeticiones [] u = 0
+nroDeRepeticiones (x:xs) u | x == u = 1 + nroDeRepeticiones xs u
+                            | otherwise = nroDeRepeticiones xs u 
 
 -- describir qué hace la función: .....
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
