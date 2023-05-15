@@ -85,10 +85,10 @@ perteneceRelacion a [] = False
 perteneceRelacion a (x:xs) | a == x = True 
                            | otherwise = perteneceRelacion a xs
 
-pertenece2 :: (Integer, Integer) -> [(Integer,Integer)] -> Bool
-pertenece2 a [] = False
-pertenece2 a (x:xs) | a == x = True 
-                   | otherwise = pertenece2 a xs
+perteneceTupla:: (Integer, Integer) -> [(Integer,Integer)] -> Bool
+perteneceTuplaa [] = False
+perteneceTuplaa (x:xs) | a == x = True 
+                   | otherwise = perteneceTuplaa xs
 
 relacionesValidas :: [Usuario] -> [Relacion] -> Bool
 relacionesValidas [] (y:ys) = False
@@ -109,7 +109,7 @@ relacionesAsimetricas (x:xs) | perteneceRelacion ((snd (x), fst (x))) (x:xs) == 
 
 noHayRelacionesRepetidas :: [Relacion] -> Bool
 noHayRelacionesRepetidas [] = True
-noHayRelacionesRepetidas (x:xs) | pertenece2 (idDeUsuario (fst (x)), idDeUsuario(snd(x))) (hacerListaRelacion xs) == True =False
+noHayRelacionesRepetidas (x:xs) | perteneceTupla(idDeUsuario (fst (x)), idDeUsuario(snd(x))) (hacerListaRelacion xs) == True =False
                                 | otherwise = noHayRelacionesRepetidas (xs)
 
 usuariosDePublicacionSonUsuariosDeRed :: [Usuario] -> [Publicacion] -> Bool
@@ -176,14 +176,10 @@ segundoElemento :: Relacion -> Usuario
 segundoElemento (x, xs) = xs
 
 listaDeAmigos :: RedSocial -> Usuario -> [Usuario]
-listaDeAmigos (u, [h], p) a = [amigo h a]
+listaDeAmigos (u, [], p) a = []
 listaDeAmigos (u, (x : xs), p) a | a == primerElemento x = (segundoElemento x : listaDeAmigos (u, (xs), p) a)
-                               | a == segundoElemento x = (primerElemento x : listaDeAmigos (u, (xs), p) a)
-                               | otherwise = listaDeAmigos (u, (xs), p) a
-
-amigo :: Relacion -> Usuario -> Usuario
-amigo (a) j | idDeUsuario (primerElemento (a)) == idDeUsuario j = segundoElemento (a)
-            | idDeUsuario (segundoElemento (a)) == idDeUsuario j = primerElemento (a)
+                                 | a == segundoElemento x = (primerElemento x : listaDeAmigos (u, (xs), p) a)
+                                 | otherwise = listaDeAmigos (u, (xs), p) a
 
 
 quitarRepetidos :: [Usuario] -> [Usuario]
@@ -320,5 +316,5 @@ auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =aux
                              | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (drop 1(x:y:xs)) u1 u2
                              | x == u1 && terminaConDeUsuarios (y:xs) ==u2 = (x:y:xs)
 
---prueba
+
 
