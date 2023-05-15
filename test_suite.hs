@@ -48,3 +48,5 @@ relacionesA = [relacion1_2, relacion1_4, relacion2_3, relacion2_4, relacion3_4]
 publicacionesA = [publicacion1_1, publicacion1_2, publicacion2_1, publicacion2_2, publicacion3_1, publicacion3_2, publicacion4_1, publicacion4_2]
 
 redA = (usuariosA, relacionesA, publicacionesA)
+
+-- todasLasPublicaciones [((1, "Juan"), "Este es mi primer post", [(2, "Natalia"), (4, "Mariela")]),((1, "Juan"), "Este es mi tercer post", [(2, "Natalia"), (5, "Natalia")]),((2, "Natalia"), "Good Bye World",[(1, "Juan"),(4, "Mariela")])] (2, "Natalia")

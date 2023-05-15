@@ -280,5 +280,45 @@ nroDeRepeticiones (x:xs) u | x == u = 1 + nroDeRepeticiones xs u
                             | otherwise = nroDeRepeticiones xs u 
 
 -- describir qué hace la función: .....
-existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
-existeSecuenciaDeAmigos = undefined
+existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
+existeSecuenciaDeAmigos red u1 u2| redSocialValida red ==True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True &&perteneceUsuario u2 (usuarios red)==True && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && length (auxSeqDeAmigos (usuarios red) u1 u2) >=2 = True
+                                 | otherwise = False
+
+relacionadoDirecto :: Usuario -> Usuario ->RedSocial ->Bool
+relacionadoDirecto u1 u2 (_, [], _) = False  
+relacionadoDirecto u1 u2 (_, rs, _) |perteneceRelacion (u1,u2) rs  == True ||perteneceRelacion (u2,u1) rs == True = True
+                                    |otherwise = False 
+
+cadenaDeAmigos :: [Usuario] -> RedSocial ->Bool
+cadenaDeAmigos [] red= False
+cadenaDeAmigos [x] red = False
+cadenaDeAmigos [x, y] red| relacionadoDirecto x y red == True = True
+cadenaDeAmigos (x:y:xs) red|relacionadoDirecto x y red == True = cadenaDeAmigos (y:xs) red
+cadenaDeAmigos (x:y:xs) red|otherwise = False
+
+empiezaConDeUsuarios :: [Usuario] -> Usuario
+empiezaConDeUsuarios [] = error "No hay usuarios en la lista"
+empiezaConDeUsuarios [x] = x
+empiezaConDeUsuarios listadeusuarios=head(listadeusuarios)
+
+terminaConDeUsuarios :: [Usuario] -> Usuario
+terminaConDeUsuarios [] = error "No hay usuarios en la lista"
+terminaConDeUsuarios [x] = x
+terminaConDeUsuarios (_:xs)=terminaConDeUsuarios xs
+
+sonDeLaRed :: RedSocial -> [Usuario] ->Bool
+sonDeLaRed red [] = True
+sonDeLaRed red (x:xs)| perteneceUsuario x (usuarios red) == True = sonDeLaRed red xs
+                            | otherwise = False
+
+
+
+auxSeqDeAmigos :: [Usuario] -> Usuario -> Usuario -> [Usuario]
+auxSeqDeAmigos [] u1 u2 = []
+auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =auxSeqDeAmigos (drop 1 (init (x:y:xs))) u1 u2
+                             | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x]++auxSeqDeAmigos (init(y:xs)) y u2
+                             | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (drop 1(x:y:xs)) u1 u2
+                             | x == u1 && terminaConDeUsuarios (y:xs) ==u2 = (x:y:xs)
+
+
+
