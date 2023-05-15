@@ -88,7 +88,7 @@ perteneceRelacion a (x:xs) | a == x = True
 perteneceTupla:: (Integer, Integer) -> [(Integer,Integer)] -> Bool
 perteneceTupla a [] = False
 perteneceTupla a (x:xs) | a == x = True 
-                   | otherwise = perteneceTuplaa xs
+                   | otherwise = perteneceTupla a xs
 
 relacionesValidas :: [Usuario] -> [Relacion] -> Bool
 relacionesValidas [] (y:ys) = False
@@ -406,9 +406,9 @@ perteneceRelacion a (x:xs) | a == x = True
                            | otherwise = perteneceRelacion a xs
 
 perteneceTupla:: (Integer, Integer) -> [(Integer,Integer)] -> Bool
-perteneceTuplaa [] = False
-perteneceTuplaa (x:xs) | a == x = True 
-                   | otherwise = perteneceTuplaa xs
+perteneceTupla a [] = False
+perteneceTupla a (x:xs) | a == x = True 
+                   | otherwise = perteneceTupla a xs
 
 relacionesValidas :: [Usuario] -> [Relacion] -> Bool
 relacionesValidas [] (y:ys) = False
