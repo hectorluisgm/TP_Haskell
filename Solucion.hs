@@ -103,7 +103,7 @@ relacionesValidas (x:xs) (y:ys)|usuariosDeRelacionesValidos (x:xs) (y:ys) == Tru
 usuariosDeRelacionesValidos :: [Usuario] -> [Relacion] -> Bool
 usuariosDeRelacionesValidos (x:xs) [] = True
 usuariosDeRelacionesValidos [] (y:ys) = False
-usuariosDeRelacionesValidos (x:xs) (y:ys) | primerElemento (y) == segundoElemento (y) || perteneceUsuario (fst(y)) ((x:xs)) == False || perteneceUsuario (snd(y)) ((x:xs)) == False = False
+usuariosDeRelacionesValidos (x:xs) (y:ys) | primerElemento (y) == segundoElemento (y) || perteneceUsuario (primerElemento (y)) ((x:xs)) == False || perteneceUsuario (segundoElemento (y)) ((x:xs)) == False = False
                                           | otherwise = usuariosDeRelacionesValidos (x:xs) ys
 
 relacionesAsimetricas :: [Relacion] -> Bool
