@@ -1,6 +1,6 @@
 module Solucion where
-main :: IO ()
-main = putStrLn "Hola, mundo!"
+-- main :: IO ()
+-- main = putStrLn "Hola, mundo!"
 
 -- Completar con los datos del grupo
 --
@@ -84,7 +84,7 @@ perteneceUsuario a [] = False
 perteneceUsuario a (x:xs) | a == x = True 
                           | otherwise = perteneceUsuario a xs
 
-perteneceRelacion :: Relacion -> [Relacion] -> Bool
+perteneceRelacion :: (Relacion) -> [Relacion] -> Bool
 perteneceRelacion a [] = False
 perteneceRelacion a (x:xs) | a == x = True 
                            | otherwise = perteneceRelacion a xs
@@ -97,13 +97,13 @@ perteneceTupla a (x:xs) | a == x = True
 relacionesValidas :: [Usuario] -> [Relacion] -> Bool
 relacionesValidas [] (y:ys) = False
 relacionesValidas (x:xs) [] = True
-relacionesValidas (x:xs) (y:ys)| usuariosDeRelacionesValidos (x:xs) (y:ys) == True && relacionesAsimetricas (y:ys) == True && noHayRelacionesRepetidas (y:ys) == True = True
+relacionesValidas (x:xs) (y:ys)|usuariosDeRelacionesValidos (x:xs) (y:ys) == True && relacionesAsimetricas (y:ys) == True && noHayRelacionesRepetidas (y:ys) == True = True
                                |otherwise = False
                                
 usuariosDeRelacionesValidos :: [Usuario] -> [Relacion] -> Bool
 usuariosDeRelacionesValidos (x:xs) [] = True
 usuariosDeRelacionesValidos [] (y:ys) = False
-usuariosDeRelacionesValidos (x:xs) (y:ys) | primerElemento(y) == segundoElemento(y) || perteneceUsuario (primerElemento(y)) ((x:xs)) == False || perteneceUsuario (segundoElemento(y)) ((x:xs)) == False = False
+usuariosDeRelacionesValidos (x:xs) (y:ys) | primerElemento (y) == segundoElemento (y) || perteneceUsuario (fst(y)) ((x:xs)) == False || perteneceUsuario (snd(y)) ((x:xs)) == False = False
                                           | otherwise = usuariosDeRelacionesValidos (x:xs) ys
 
 relacionesAsimetricas :: [Relacion] -> Bool
@@ -113,26 +113,26 @@ relacionesAsimetricas (x:xs) | perteneceRelacion ((segundoElemento (x), primerEl
 
 noHayRelacionesRepetidas :: [Relacion] -> Bool
 noHayRelacionesRepetidas [] = True
-noHayRelacionesRepetidas (x:xs) | perteneceTupla(idDeUsuario (primerElemento (x)), idDeUsuario(segundoElemento(x))) (hacerListaRelacion xs) == True =False
+noHayRelacionesRepetidas (x:xs) | perteneceTupla (idDeUsuario (primerElemento (x)), idDeUsuario(segundoElemento(x))) (hacerListaRelacion xs) == True =False
                                 | otherwise = noHayRelacionesRepetidas (xs)
 
 usuariosDePublicacionSonUsuariosDeRed :: [Usuario] -> [Publicacion] -> Bool
 usuariosDePublicacionSonUsuariosDeRed [] (y:ys) = False
 usuariosDePublicacionSonUsuariosDeRed (x:xs) [] = True
 usuariosDePublicacionSonUsuariosDeRed (x:xs) ((usuario, _, _):ys) | perteneceUsuario (usuario) (x:xs) == False = False
-                                                    | otherwise = usuariosDePublicacionSonUsuariosDeRed (x:xs) ys
+                                                                  | otherwise = usuariosDePublicacionSonUsuariosDeRed (x:xs) ys
 
 usuariosDeLikeDePublicacionSonUsuariosDeRed :: [Usuario] -> [Publicacion] -> Bool
 usuariosDeLikeDePublicacionSonUsuariosDeRed [] (y:ys) = False
 usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) [] = True
 usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) ((_,_,usuarios):ys) | usuariosLikeValidos (x:xs) (usuarios) == False = False
-                                                                     | otherwise = usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) ys
+                                                                       | otherwise = usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) ys
 
 usuariosLikeValidos :: [Usuario] -> [Usuario] -> Bool
-usuariosLikeValidos [] (y:ys) = False
-usuariosLikeValidos (x:xs) [] = True
-usuariosLikeValidos (x:xs) (y:ys) | perteneceUsuario y (x:xs) == False = False
-                                  | otherwise = usuariosLikeValidos ys (x:xs)
+usuariosLikeValidos [] (x:xs) = False
+usuariosLikeValidos usuarios [] = True
+usuariosLikeValidos usuarios (x:xs) | perteneceUsuario x usuarios == True = usuariosLikeValidos usuarios xs                                  
+                                    | otherwise = False
 
 hacerListaUsuariosPublicaciones:: [Publicacion] -> [Integer]
 hacerListaUsuariosPublicaciones [] = []
@@ -150,8 +150,8 @@ perteneceString a (x:xs) | a == x = True
 noHayPublicacionesRepetidas :: [Publicacion] -> Bool
 noHayPublicacionesRepetidas [] = True
 noHayPublicacionesRepetidas ((usuario,publicacion,_):xs)| pertenece (idDeUsuario(usuario)) (hacerListaUsuariosPublicaciones(xs)) == True && perteneceString (publicacion) (hacerListaPublicaciones(xs)) ==True =False
-                                                        |otherwise = noHayPublicacionesRepetidas (xs)
-            
+                                                        |otherwise = noHayPublicacionesRepetidas (xs)   
+
 publicacionesValidas :: [Usuario] -> [Publicacion] -> Bool
 publicacionesValidas (x:xs) [] = True
 publicacionesValidas [] (y:ys) = False
@@ -160,8 +160,6 @@ publicacionesValidas (x:xs) (y:ys) | usuariosDePublicacionSonUsuariosDeRed (x:xs
 
 redSocialValida :: RedSocial -> Bool
 redSocialValida ([], _, _) = False
-redSocialValida (_, [], _) = True
-redSocialValida (_, _, []) = True
 redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios == True && relacionesValidas (usuarios) (relaciones) == True && publicacionesValidas (usuarios) (publicaciones) == True = True
                                                       | otherwise = False
                                                       
