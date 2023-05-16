@@ -334,8 +334,8 @@ auxSeqDeAmigos :: [Usuario] -> Usuario -> Usuario -> [Usuario]
 auxSeqDeAmigos [] u1 u2 = []
 auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =auxSeqDeAmigos (sacaPrimero (sacaUltimoUsuario (x:y:xs))) u1 u2
                              | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x] ++ auxSeqDeAmigos (sacaUltimoUsuario (y:xs)) y u2
-                             | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (sacaPrimero (x:y:xs)) u1 u2
-                             | x == u1 && terminaConDeUsuarios (y:xs) ==u2 = (x:y:xs)
+                             | x /= u1 && terminaConDeUsuarios(y:xs) == u2 = auxSeqDeAmigos (sacaPrimero (x:y:xs)) u1 u2
+                             | x == u1 && terminaConDeUsuarios (y:xs) == u2 = (x:y:xs)
 
 
 
