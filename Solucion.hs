@@ -60,8 +60,12 @@ pertenece a [] = False
 pertenece a (x:xs) | a == x = True 
                    | otherwise = pertenece a xs
 
+longitud :: [t] -> Integer
+longitud [] = 0
+longitud (_:xs) = 1 + longitud xs
+
 usuarioValido :: Usuario -> Bool
-usuarioValido a  | idDeUsuario a > 0 && length (nombreDeUsuario a) > 0 = True
+usuarioValido a  | idDeUsuario a > 0 && longitud (nombreDeUsuario a) > 0 = True
                  | otherwise = False
 
 
@@ -170,10 +174,10 @@ amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe (u, r, p) a = quitarRepetidos (listaDeAmigos (u, r, p) a)
 
 primerElemento :: Relacion -> Usuario
-primerElemento (x, xs) = x
+primerElemento (x, y) = x
 
 segundoElemento :: Relacion -> Usuario
-segundoElemento (x, xs) = xs
+segundoElemento (x, y) = y
 
 listaDeAmigos :: RedSocial -> Usuario -> [Usuario]
 listaDeAmigos (u, [], p) a = []
@@ -181,7 +185,11 @@ listaDeAmigos (u, (x : xs), p) a | a == primerElemento x = (segundoElemento x : 
                                  | a == segundoElemento x = (primerElemento x : listaDeAmigos (u, (xs), p) a)
                                  | otherwise = listaDeAmigos (u, (xs), p) a
 
+primerInteger :: (Integer,Integer) -> Integer
+primerInteger (x,y) = x 
 
+segundoInteger :: (Integer,Integer) -> Integer 
+segundoInteger (x,y) = y
 
 quitarRepetidos :: [Usuario] -> [Usuario]
 quitarRepetidos [a] = [a]
@@ -199,7 +207,7 @@ auxCantidadDeAmigos (_,rs,_) usuario = perteneceRelacionInt (idDeUsuario (usuari
 
 perteneceRelacionInt :: Integer -> [(Integer,Integer)] -> Integer
 perteneceRelacionInt a [] = 0 
-perteneceRelacionInt a (x:xs) | a == primerElemento (x) || a == segundoElemento (x) = 1 + perteneceRelacionInt a xs 
+perteneceRelacionInt a (x:xs) | a == primerInteger (x) || a == segundoInteger (x) = 1 + perteneceRelacionInt a xs 
                                 | otherwise = perteneceRelacionInt a xs 
 
 -- describir qué hace la función: .....
@@ -217,7 +225,7 @@ primerElementoUsuario :: (Usuario, Integer) ->  Usuario
 primerElementoUsuario (us, int) = us
 
 segundoElementoUsuario :: (Usuario, Integer) -> Integer
-segundoElementoUsuario (us, int) = Integer
+segundoElementoUsuario (us, int) = int
 
 maximoDeAmigos :: [(Usuario, Integer)] -> Usuario
 maximoDeAmigos [x] = primerElementoUsuario  x
@@ -261,7 +269,7 @@ lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuari
 
 -- describir qué hace la función: .....
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
-tieneUnSeguidorFiel (us,rs,ps) usuario | length (todasLasPublicacionesDe ps usuario) > 0 && usuarioMasRepetido (hacerListaDeLikes (todasLasPublicacionesDe (ps) usuario) usuario) == length (todasLasPublicacionesDe (ps) usuario) = True
+tieneUnSeguidorFiel (us,rs,ps) usuario | longitud (todasLasPublicacionesDe ps usuario) > 0 && usuarioMasRepetido (hacerListaDeLikes (todasLasPublicacionesDe (ps) usuario) usuario) == longitud (todasLasPublicacionesDe (ps) usuario) = True
                                        | otherwise = False
  
 
@@ -270,21 +278,21 @@ hacerListaDeLikes [] u = []
 hacerListaDeLikes ((us, pub, like):xs) u| u == us = likesDePublicacion (us,pub,like)++hacerListaDeLikes xs u
                                         | otherwise = hacerListaDeLikes xs u
 
-usuarioMasRepetido :: [Usuario] -> Int
+usuarioMasRepetido :: [Usuario] -> Integer
 usuarioMasRepetido [] = error "Lista Vacia"
 usuarioMasRepetido [x] = 0
 usuarioMasRepetido (x:y:xs) | (nroDeRepeticiones (x:xs) x) >= (nroDeRepeticiones (x:xs) y) =  1 + usuarioMasRepetido (x:xs)
                             | otherwise = usuarioMasRepetido (y:xs)
 
 
-nroDeRepeticiones :: [Usuario] -> Usuario -> Int
+nroDeRepeticiones :: [Usuario] -> Usuario -> Integer
 nroDeRepeticiones [] u = 0
 nroDeRepeticiones (x:xs) u | x == u = 1 + nroDeRepeticiones xs u
                             | otherwise = nroDeRepeticiones xs u 
 
 -- describir qué hace la función: .....
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
-existeSecuenciaDeAmigos red u1 u2| redSocialValida red ==True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True &&perteneceUsuario u2 (usuarios red)==True && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && length (auxSeqDeAmigos (usuarios red) u1 u2) >=2 = True
+existeSecuenciaDeAmigos red u1 u2| redSocialValida red ==True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True &&perteneceUsuario u2 (usuarios red)==True && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && longitud (auxSeqDeAmigos (usuarios red) u1 u2) >=2 = True
                                  | otherwise = False
 
 relacionadoDirecto :: Usuario -> Usuario ->RedSocial ->Bool
@@ -296,8 +304,8 @@ cadenaDeAmigos :: [Usuario] -> RedSocial ->Bool
 cadenaDeAmigos [] red= False
 cadenaDeAmigos [x] red = False
 cadenaDeAmigos [x, y] red| relacionadoDirecto x y red == True = True
-cadenaDeAmigos (x:y:xs) red|relacionadoDirecto x y red == True = cadenaDeAmigos (y:xs) red
-cadenaDeAmigos (x:y:xs) red|otherwise = False
+cadenaDeAmigos (x:y:xs) red | relacionadoDirecto x y red == True = cadenaDeAmigos (y:xs) red
+cadenaDeAmigos (x:y:xs) red | otherwise = False
 
 empiezaConDeUsuarios :: [Usuario] -> Usuario
 empiezaConDeUsuarios [] = error "No hay usuarios en la lista"
@@ -314,13 +322,21 @@ sonDeLaRed red [] = True
 sonDeLaRed red (x:xs)| perteneceUsuario x (usuarios red) == True = sonDeLaRed red xs
                             | otherwise = False
 
+sacaUltimoUsuario :: [Usuario] -> [Usuario] 
+sacaUltimoUsuario [] = []
+sacaUltimoUsuario [x] = []
+sacaUltimoUsuario (x:xs) = x : sacaUltimoUsuario xs
+
+sacaPrimero :: [Usuario] -> [Usuario]
+sacaPrimero [] = []
+sacaPrimero (x:xs) = xs
 
 
 auxSeqDeAmigos :: [Usuario] -> Usuario -> Usuario -> [Usuario]
 auxSeqDeAmigos [] u1 u2 = []
-auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =auxSeqDeAmigos (drop 1 (init (x:y:xs))) u1 u2
-                             | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x]++auxSeqDeAmigos (init(y:xs)) y u2
-                             | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (drop 1(x:y:xs)) u1 u2
+auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =auxSeqDeAmigos (sacaPrimero (sacaUltimoUsuario (x:y:xs))) u1 u2
+                             | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x] ++ auxSeqDeAmigos (sacaUltimoUsuario (y:xs)) y u2
+                             | x /= u1 && terminaConDeUsuarios(y:xs) ==u2 = auxSeqDeAmigos (sacaPrimero (x:y:xs)) u1 u2
                              | x == u1 && terminaConDeUsuarios (y:xs) ==u2 = (x:y:xs)
 
 
