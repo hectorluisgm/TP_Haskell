@@ -248,7 +248,7 @@ todasLasPublicacionesDe (x:xs) (id,nombre) | id == head (hacerListaUsuariosPubli
                                             | otherwise = todasLasPublicacionesDe (xs) (id,nombre)
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
-tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialValida (usuarios, relaciones, publicaciones) == True) && (usuarioValido (id,nombre) == True) && (pertenece id (hacerLista usuarios) == True) = True
+tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialValida (usuarios, relaciones, publicaciones) == True) && (usuarioValido (id,nombre) == True) && (perteneceUsuario (id,nombre) (usuarios) == True) = True
                                                         | otherwise = False
 
 -- describir qué hace la función: .....
@@ -290,7 +290,7 @@ nroDeRepeticiones (x:xs) u | x == u = 1 + nroDeRepeticiones xs u
 
 -- describir qué hace la función: .....
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
-existeSecuenciaDeAmigos red u1 u2| redSocialValida red ==True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True &&perteneceUsuario u2 (usuarios red)==True && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && longitud (auxSeqDeAmigos (usuarios red) u1 u2) >=2 = True
+existeSecuenciaDeAmigos red u1 u2| tripleValidacion red u1 && tripleValidacion red u2 && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && (longitud (auxSeqDeAmigos (usuarios red) u1 u2) >=2) = True
                                  | otherwise = False
 
 relacionadoDirecto :: Usuario -> Usuario ->RedSocial ->Bool
@@ -303,7 +303,7 @@ cadenaDeAmigos [] red= False
 cadenaDeAmigos [x] red = False
 cadenaDeAmigos [x, y] red| relacionadoDirecto x y red == True = True
 cadenaDeAmigos (x:y:xs) red | relacionadoDirecto x y red == True = cadenaDeAmigos (y:xs) red
-cadenaDeAmigos (x:y:xs) red | otherwise = False
+                             | otherwise = False
 
 empiezaConDeUsuarios :: [Usuario] -> Usuario
 empiezaConDeUsuarios [] = error "No hay usuarios en la lista"
@@ -336,6 +336,3 @@ auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =aux
                              | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x] ++ auxSeqDeAmigos (sacaUltimoUsuario (y:xs)) y u2
                              | x /= u1 && terminaConDeUsuarios(y:xs) == u2 = auxSeqDeAmigos (sacaPrimero (x:y:xs)) u1 u2
                              | x == u1 && terminaConDeUsuarios (y:xs) == u2 = (x:y:xs)
-
-
-

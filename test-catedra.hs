@@ -48,7 +48,7 @@ publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
 
-publicacion2_1 = (usuario2, "Este es mi tercer post", [usuario2, usuario5])
+publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
 
 publicacion3_1 = (usuario3, "Lorem Ipsum", [])
