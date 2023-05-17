@@ -1,6 +1,5 @@
 module Solucion where
--- main :: IO ()
--- main = putStrLn "Hola, mundo!"
+
 
 -- Completar con los datos del grupo
 --
@@ -8,7 +7,7 @@ module Solucion where
 -- Integrante 1: Nombre Apellido, email, LU
 -- Integrante 2: Nombre Apellido, email, LU
 -- Integrante 3: Nombre Apellido, email, LU
--- Integrante 4: Nombre Apellido, email, LU
+-- Integrante 4: Hector Gomez Moya, hectorluisgomezmoya@gmail.com , LU 921/23
 
 type Usuario = (Integer, String) -- (id, nombre)
 type Relacion = (Usuario, Usuario) -- usuarios que se relacionan
@@ -40,6 +39,7 @@ likesDePublicacion (_, _, us) = us
 
 -- Ejercicios
 
+-- describir qué hace la función: .....
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios redSocial| redSocialValida redSocial == False = error "Red Social no cumple los requisitos"
                            | otherwise = proyectarNombres(usuarios(redSocial))
@@ -49,7 +49,7 @@ noHayIdsRepetidos [] = True
 noHayIdsRepetidos (x:xs) | pertenece (idDeUsuario x) (hacerLista xs) = False
                          | otherwise = noHayIdsRepetidos xs
 
-
+ 
 hacerLista:: [Usuario] -> [Integer]
 hacerLista [] = []
 hacerLista (x:xs) = idDeUsuario (x) : hacerLista (xs)
@@ -178,22 +178,22 @@ segundoElemento :: Relacion -> Usuario
 segundoElemento (x, y) = y
 
 listaDeAmigos :: RedSocial -> Usuario -> [Usuario]
-listaDeAmigos (u, [], p) a = []
-listaDeAmigos (u, (x : xs), p) a | a == primerElemento x = (segundoElemento x : listaDeAmigos (u, (xs), p) a)
-                                 | a == segundoElemento x = (primerElemento x : listaDeAmigos (u, (xs), p) a)
-                                 | otherwise = listaDeAmigos (u, (xs), p) a
-
-primerInteger :: (Integer,Integer) -> Integer
-primerInteger (x,y) = x 
-
-segundoInteger :: (Integer,Integer) -> Integer 
-segundoInteger (x,y) = y
+listaDeAmigos (us, [], ps) a = []
+listaDeAmigos (us, (x : xs), ps) a | a == primerElemento x = (segundoElemento x : listaDeAmigos (us, (xs), ps) a)
+                                    | a == segundoElemento x = (primerElemento x : listaDeAmigos (us, (xs), ps) a)
+                                    | otherwise = listaDeAmigos (us, (xs), ps) a
 
 quitarRepetidos :: [Usuario] -> [Usuario]
 quitarRepetidos [a] = [a]
 quitarRepetidos (x:xs) | perteneceUsuario x xs == True = quitarRepetidos xs
                        | otherwise = (x: quitarRepetidos xs )
 
+
+primerInteger :: (Integer,Integer) -> Integer
+primerInteger (x,y) = x 
+
+segundoInteger :: (Integer,Integer) -> Integer 
+segundoInteger (x,y) = y
 
 -- describir qué hace la función: .....
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
