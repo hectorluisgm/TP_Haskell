@@ -184,6 +184,7 @@ listaDeAmigos (us, (x : xs), ps) a | a == primerElemento x = (segundoElemento x 
                                     | otherwise = listaDeAmigos (us, (xs), ps) a
 
 quitarRepetidos :: [Usuario] -> [Usuario]
+quitarRepetidos [] = []
 quitarRepetidos [a] = [a]
 quitarRepetidos (x:xs) | perteneceUsuario x xs == True = quitarRepetidos xs
                        | otherwise = (x: quitarRepetidos xs )
@@ -197,8 +198,8 @@ segundoInteger (x,y) = y
 
 -- describir qué hace la función: .....
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
-cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == False && usuarioValido usuario == False && perteneceUsuario usuario us == False = error "RedSocial o Usuario No cumple con los requisitos"
-                                    | otherwise = auxCantidadDeAmigos (us,rs,ps) usuario 
+cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == True && usuarioValido usuario == True && perteneceUsuario usuario us == True = auxCantidadDeAmigos (us,rs,ps) usuario 
+                                    | otherwise = error "Red social o Usuario no cumple los requisitos iniciales."
 
 auxCantidadDeAmigos :: RedSocial -> Usuario -> Integer
 auxCantidadDeAmigos (_,rs,_) usuario = perteneceRelacionInt (idDeUsuario (usuario)) (hacerListaRelacion rs) 
@@ -219,15 +220,15 @@ hacerListaAmigos ::  RedSocial -> [Usuario] ->  [(Usuario, Integer)]
 hacerListaAmigos red [] = []
 hacerListaAmigos red (x:xs) = cantidadDeAmigosUsuario red x : hacerListaAmigos red xs 
 
-primerElementoUsuario :: (Usuario, Integer) ->  Usuario
-primerElementoUsuario (us, int) = us
+primerElementoUsuarioInt :: (Usuario, Integer) ->  Usuario
+primerElementoUsuarioInt (us, int) = us
 
-segundoElementoUsuario :: (Usuario, Integer) -> Integer
-segundoElementoUsuario (us, int) = int
+segundoElementoUsuarioInt :: (Usuario, Integer) -> Integer
+segundoElementoUsuarioInt (us, int) = int
 
 maximoDeAmigos :: [(Usuario, Integer)] -> Usuario
-maximoDeAmigos [x] = primerElementoUsuario  x
-maximoDeAmigos (x:y:xs) | segundoElementoUsuario  x > segundoElementoUsuario  y = maximoDeAmigos (x:xs)
+maximoDeAmigos [x] = primerElementoUsuarioInt  x
+maximoDeAmigos (x:y:xs) | segundoElementoUsuarioInt  x > segundoElementoUsuarioInt  y = maximoDeAmigos (x:xs)
                         | otherwise = maximoDeAmigos (y:xs)
 
 -- describir qué hace la función: .....
