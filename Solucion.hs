@@ -254,12 +254,13 @@ tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialV
 
 -- describir qué hace la función: .....
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
-publicacionesQueLeGustanA red usuario| redSocialValida red == True && usuarioValido usuario == True && perteneceUsuario usuario (usuarios red) == True = listapublicacionesDeLike (publicaciones (red)) usuario
+publicacionesQueLeGustanA red usuario | redSocialValida red == True && usuarioValido usuario == True && perteneceUsuario usuario (usuarios red) == True = listapublicacionesDeLike (publicaciones (red)) usuario
 
 listapublicacionesDeLike:: [Publicacion] -> Usuario -> [Publicacion]
 listapublicacionesDeLike [] usuario = []
 listapublicacionesDeLike (x:xs) usuario| perteneceUsuario usuario (likesDePublicacion x) == True = (x: listapublicacionesDeLike xs usuario)
-                                       |otherwise =  listapublicacionesDeLike xs usuario
+                                       | otherwise =  listapublicacionesDeLike xs usuario
+
 
 -- describir qué hace la función: .....
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool

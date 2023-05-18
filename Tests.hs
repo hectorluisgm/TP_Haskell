@@ -35,8 +35,12 @@ tests = test [
     " publicacionesDe 3" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5],
 
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
+    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [],
+    " publicacionesQueLeGustanA 3" ~: (publicacionesQueLeGustanA redF usuario4) ~?= [publicacion1_1],
 
     " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " lesGustanLasMismasPublicaciones 1" ~: (lesGustanLasMismasPublicaciones redG usuario2 usuario5) ~?= True,
+    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redC usuario2 usuario4) ~?= False,
 
     " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
 
@@ -73,8 +77,8 @@ relacion3_5 = (usuario5, usuario3)
 relacion3_6 = (usuario6, usuario3)
 relacion3_7 = (usuario7, usuario3)
 relacion3_8 = (usuario8, usuario3)
-relacion3_9 = (usuario10, usuario3)
-relacion3_10 = (usuario9, usuario3)
+relacion3_9 = (usuario9, usuario3)
+relacion3_10 = (usuario10, usuario3)
 relacion3_11 = (usuario11, usuario3)
 relacion3_12 = (usuario12, usuario3)
 
@@ -82,8 +86,8 @@ relacion4_5 = (usuario5, usuario4)
 relacion4_6 = (usuario6, usuario4)
 relacion4_7 = (usuario7, usuario4)
 relacion4_8 = (usuario8, usuario4)
-relacion4_9 = (usuario10, usuario4)
-relacion4_10 = (usuario9, usuario4)
+relacion4_9 = (usuario9, usuario4)
+relacion4_10 = (usuario10, usuario4)
 relacion4_11 = (usuario11, usuario4)
 relacion4_12 = (usuario12, usuario4)
 
@@ -133,3 +137,14 @@ usuariosE = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario
 relacionesE = [relacion1_3, relacion2_3, relacion3_4, relacion3_5, relacion3_6, relacion3_7, relacion3_8, relacion3_9, relacion3_10, relacion3_11, relacion3_12]
 publicacionesE = [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redE = (usuariosE, relacionesE, publicacionesE)
+
+usuariosF = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6,usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesF = [relacion1_3, relacion2_3, relacion3_4, relacion3_5, relacion3_6, relacion3_7, relacion3_8, relacion3_9, relacion3_10, relacion3_11, relacion3_12]
+publicacionesF = [publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
+redF = (usuariosF, relacionesF, publicacionesF)
+
+usuariosG = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesG = [relacion1_3, relacion2_3, relacion3_4, relacion3_5, relacion3_6, relacion3_7, relacion3_8, relacion3_9, relacion3_10, relacion3_11, relacion3_12, relacion1_4, relacion2_4, relacion4_5, relacion4_6, relacion4_7, relacion4_8, relacion4_9, relacion4_10, relacion4_11, relacion4_12]
+publicacionesG = [publicacion1_3, publicacion3_3]
+redG = (usuariosG, relacionesG, publicacionesG)
+
