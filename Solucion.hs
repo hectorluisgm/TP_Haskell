@@ -39,6 +39,7 @@ likesDePublicacion (_, _, us) = us
 
 -- Ejercicios
 
+-- Ejercicio 1:
 -- describir qué hace la función: En principio, la funcion nombresDeUsuarios requiere por especificacion que la red social sea valida, cosa que se hace en la primer linea de codigo. En caso de que no se cumpla la condicion, da un error, y al cumplirse, usa la funcion auxiliar proyectar nombres para recorrer la lista de usuarios de la red social, extraer el string de nombre de la tupla del tipo Usuario y generar una nueva lista con cada uno de esos strings.
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios redSocial| redSocialValida redSocial == False = error "Red Social no cumple los requisitos"
