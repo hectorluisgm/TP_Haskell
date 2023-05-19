@@ -169,7 +169,7 @@ proyectarNombres [] = []
 proyectarNombres (x:xs) = (nombreDeUsuario(x):proyectarNombres(xs))
 
 -- Ejercicio 2
--- describir qué hace la función: 
+-- describir qué hace la función: Esta función utiliza una lista de amigos del usuario mediante sus relaciones en una red social dada para generar una lista de todos sus amigos. En caso de haber amistades repetidas en distintas relaciones, solamente se nombran una vez gracias a la función quitar repetidos.
 amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe (u, r, p) a |listaDeAmigos (u, r, p) a  == [] = [] 
                      |otherwise =quitarRepetidos (listaDeAmigos (u,r,p) a)
