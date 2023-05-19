@@ -2,12 +2,11 @@ module Solucion where
 
 
 -- Completar con los datos del grupo
---
 -- Nombre de Grupo: Debuggers
 -- Integrante 1: Ignacio Martin Vittorini Fennema, nachovittfenn@gmail.com, LU 460/20
 -- Integrante 2: Milagros Guadalupe Villagran, milagrosgvillagran@gmail.com, LU 58/21
 -- Integrante 3: Nicolas Cestau, nicocestau@gmail.com, LU 834/23
--- Integrante 4: Hector Gomez Moya, hectorluisgomezmoya@gmail.com , LU 921/23
+-- Integrante 4: Hector Gomez Moya, hectorluisgomezmoya@gmail.com, LU 921/23
 
 type Usuario = (Integer, String) -- (id, nombre)
 type Relacion = (Usuario, Usuario) -- usuarios que se relacionan
@@ -40,11 +39,12 @@ likesDePublicacion (_, _, us) = us
 -- Ejercicios
 
 -- Ejercicio 1:
--- describir qué hace la función: En principio, la funcion nombresDeUsuarios requiere por especificacion que la red social sea valida, cosa que se hace en la primer linea de codigo. En caso de que no se cumpla la condicion, da un error, y al cumplirse, usa la funcion auxiliar proyectar nombres para recorrer la lista de usuarios de la red social, extraer el string de nombre de la tupla del tipo Usuario y generar una nueva lista con cada uno de esos strings.
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios redSocial| redSocialValida redSocial == False = error "Red Social no cumple los requisitos"
                            | otherwise = proyectarNombres(usuarios(redSocial))
+-- Qué hace la función: En principio, la funcion nombresDeUsuarios requiere por especificacion que la red social sea valida, cosa que se hace en la primer linea de codigo. En caso de que no se cumpla la condicion, da un error, y al cumplirse, usa la funcion auxiliar proyectar nombres para recorrer la lista de usuarios de la red social, extraer el string de nombre de la tupla del tipo Usuario y generar una nueva lista con cada uno de esos strings.
 
+--Auxiliares--
 noHayIdsRepetidos :: [Usuario] -> Bool
 noHayIdsRepetidos [] = True
 noHayIdsRepetidos (x:xs) | pertenece (idDeUsuario x) (hacerLista xs) = False
@@ -169,11 +169,12 @@ proyectarNombres [] = []
 proyectarNombres (x:xs) = (nombreDeUsuario(x):proyectarNombres(xs))
 
 -- Ejercicio 2
--- describir qué hace la función: Esta función utiliza una lista de amigos del usuario mediante sus relaciones en una red social dada para generar una lista de todos sus amigos. En caso de haber amistades repetidas en distintas relaciones, solamente se nombran una vez gracias a la función quitar repetidos.
 amigosDe :: RedSocial -> Usuario -> [Usuario]
 amigosDe (u, r, p) a |listaDeAmigos (u, r, p) a  == [] = [] 
                      |otherwise =quitarRepetidos (listaDeAmigos (u,r,p) a)
+-- Qué hace la función: Esta función utiliza una lista de amigos del usuario mediante sus relaciones en una red social dada para generar una lista de todos sus amigos. En caso de haber amistades repetidas en distintas relaciones, solamente se nombran una vez gracias a la función quitar repetidos.
 
+--Auxiliares--
 primerElemento :: Relacion -> Usuario
 primerElemento (x, y) = x
 
@@ -192,17 +193,19 @@ quitarRepetidos [a] = [a]
 quitarRepetidos (x:xs) | perteneceUsuario x xs == True = quitarRepetidos xs
                        | otherwise = (x: quitarRepetidos xs )
 
--- Ejercicio 3
--- describir qué hace la función: La funcion cantidadDeAmigos comienza validando los requerimientos de la especificacion y en caso de que no se cumplan devuelve un error. Si se validan, la funcion, junto con sus auxiliares, toma la lista de relaciones y genera una nueva lista transcribiendolas en tuplas de (id, id) de los dos usuarios pertenecientes a una relacion, luego, toma el id del usuario de entrada y verifica con el primer elemento de la lista de tuplas (id, id) si aparece en el primero o segundo elemento, en caso de que aparezca, suma 1 y vuelve a comenzar recursivamente. Por ultimo, devuelve el numero obtenido al recorrer toda la lista de relaciones.  
+-- Ejercicio 3 
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
 cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == True && usuarioValido usuario == True && perteneceUsuario usuario us == True = longitud (amigosDe (us,rs,ps) usuario )
                                     | otherwise = error "Red social o Usuario no cumple los requisitos iniciales."
+-- Qué hace la función: La funcion cantidadDeAmigos comienza validando los requerimientos de la especificacion y en caso de que no se cumplan devuelve un error. Si se validan, devuelve la longitud de la lista de tipo Usuario obtenida de aplicar la funcion AmigosDe al usuario entrada y usando, tambien, la red social de entrada.
 
 -- Ejercicio 4
--- describir qué hace la función: La función usuarioConMasAmigos mediante una lista que contiene a cada usuario con su respectiva cantidad de amigos, calcula cuál es el número máximo de amigos de aquella lista, una vez obtenido, devuelve el nombre del usuario con su id
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos (us,rs,ps) = maximoDeAmigos (hacerListaAmigosConTupla (us,rs,ps) us)
 
+--Qué hace la función: La función usuarioConMasAmigos mediante una lista que contiene a cada usuario con su respectiva cantidad de amigos, calcula cuál es el número máximo de amigos de aquella lista, una vez obtenido, devuelve el nombre del usuario con su id
+
+--Auxiliares--
 tuplaCantidadDeAmigosYUsuario :: RedSocial -> Usuario -> (Usuario, Integer)
 tuplaCantidadDeAmigosYUsuario red usuario = (usuario,cantidadDeAmigos red usuario)
 
@@ -221,23 +224,21 @@ maximoDeAmigos [x] = primerElementoUsuario  x
 maximoDeAmigos (x:y:xs) | segundoElementoUsuario  x > segundoElementoUsuario  y = maximoDeAmigos (x:xs)
                         | otherwise = maximoDeAmigos (y:xs)
 
-
-
 --Ejercicio 5
--- describir qué hace la función: La función estaRobertoCarlos la cual recibe una RedSocial y devuelve un Bool , esta función se apoya sobre 3 funciones auxiliares y una comparación en base si la cantidad de amigos es mayor a 10 , quiere decir que existe Roberto Carlos y nos devuelve un True , de otra forma devuelve un False. Para lograr esto nos apoyamos en la función cantidadDeAmigos ,pero filtramos el usuario al que pasamos como parámetro (el cual pertenece a la RedSocial), con la otra función auxiliar MáximoDeAmigos, la cual nos devuelve el Usuario con más relaciones en toda la RedSocial, por lo tanto si las relaciones de este usuario son mayores a diez se dice que estaRobertoCarlos ósea True.
-
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos (_,[],_) = False
 estaRobertoCarlos ([],_,_) = error "La red social no es valida"
 estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hacerListaAmigosConTupla (us,rs,ps) us)) > 10 = True
                              | otherwise = False
+--Qué hace la función: La función estaRobertoCarlos la cual recibe una RedSocial y devuelve un Bool , esta función se apoya sobre 3 funciones auxiliares y una comparación en base si la cantidad de amigos es mayor a 10 , quiere decir que existe Roberto Carlos y nos devuelve un True , de otra forma devuelve un False. Para lograr esto nos apoyamos en la función cantidadDeAmigos ,pero filtramos el usuario al que pasamos como parámetro (el cual pertenece a la RedSocial), con la otra función auxiliar MáximoDeAmigos, la cual nos devuelve el Usuario con más relaciones en toda la RedSocial, por lo tanto si las relaciones de este usuario son mayores a diez se dice que estaRobertoCarlos ósea True.
 
 -- Ejercicio 6
--- describir qué hace la función: La función publicacionesDe recibe un RedSocial y un usuario , el usuario debe pertenecer a la red social para ello usamos un función auxiliar tripleValidacion , donde validamos si el usuario pertenece a la red , si el usuario es válido y por último si la RedSocial pasada es válida, por otro lado esta función usa otra función auxiliar todasLasPublicacionesDe la cual será la que de nuestro retorno, esta función crea un nueva lista con Solo las publicaciones que fueron creadas por el usuario pasado como parámetro, devolviendo así una lista de todas sus publicaciones de la RedSocial.
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) | tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) == True = todasLasPublicacionesDe publicaciones (id,nombre)
                                                                     |otherwise =  error "El usuario, relacion o publicacion estan mal definidas"
+--Qué hace la función: La función publicacionesDe recibe un RedSocial y un usuario , el usuario debe pertenecer a la red social para ello usamos un función auxiliar tripleValidacion , donde validamos si el usuario pertenece a la red , si el usuario es válido y por último si la RedSocial pasada es válida, por otro lado esta función usa otra función auxiliar todasLasPublicacionesDe la cual será la que de nuestro retorno, esta función crea un nueva lista con Solo las publicaciones que fueron creadas por el usuario pasado como parámetro, devolviendo así una lista de todas sus publicaciones de la RedSocial.
 
+--Auxiliares--
 todasLasPublicacionesDe :: [Publicacion] -> Usuario -> [Publicacion]
 todasLasPublicacionesDe [] (_,_) = []
 todasLasPublicacionesDe (x:xs) (id,nombre) | id == head (hacerListaUsuariosPublicaciones (x:xs)) = x : todasLasPublicacionesDe (xs) (id,nombre)
@@ -247,29 +248,31 @@ tripleValidacion :: RedSocial -> Usuario -> Bool
 tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialValida (usuarios, relaciones, publicaciones) == True) && (usuarioValido (id,nombre) == True) && (perteneceUsuario (id,nombre) (usuarios) == True) = True
                                                                     | otherwise = False
                                                                     
--- Ejercicio 7
--- describir qué hace la función: La funcion publicacionQueLeGustanA comienza verificando los requerimientos de la especificacion. En caso de cumplirse devuelve una lista creada por listapublicacionesDeLike, que se genera chequeando que el usuario de entrada pertenezca a los likes de la primera publicacion de la red social, y en caso de cumplirse esa condicion, añade esa primera publicacion a la lista devuelta y chequea las siguientes publicaciones de forma recursiva, hasta recorrer toda la lista. 
+-- Ejercicio 7 
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
 publicacionesQueLeGustanA red usuario | redSocialValida red == True && usuarioValido usuario == True && perteneceUsuario usuario (usuarios red) == True = listapublicacionesDeLike (publicaciones (red)) usuario
 
+--Qué hace la función: La funcion publicacionQueLeGustanA comienza verificando los requerimientos de la especificacion. En caso de cumplirse devuelve una lista creada por listapublicacionesDeLike, que se genera chequeando que el usuario de entrada pertenezca a los likes de la primera publicacion de la red social, y en caso de cumplirse esa condicion, añade esa primera publicacion a la lista devuelta y chequea las siguientes publicaciones de forma recursiva, hasta recorrer toda la lista.
+
+--Auxiliares--
 listapublicacionesDeLike:: [Publicacion] -> Usuario -> [Publicacion]
 listapublicacionesDeLike [] usuario = []
 listapublicacionesDeLike (x:xs) usuario| perteneceUsuario usuario (likesDePublicacion x) == True = (x: listapublicacionesDeLike xs usuario)
                                        | otherwise =  listapublicacionesDeLike xs usuario
 
 -- Ejercicio 8
--- describir qué hace la función: Se verifica que se cumplan todas las condiciones requeridas por la especificacion, y se le agrega otra, en donde, utilizando al funcion definida por el ejercicio 7, publicacionesQueLeGustanA, se igual dos listas generadas cada una por uno de los 2 usuarios de entrada y al ser iguales, se devuelve un True
 lesGustanLasMismasPublicaciones :: RedSocial -> Usuario -> Usuario -> Bool
 lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuarioValido u1 == True && usuarioValido u2 == True && perteneceUsuario u1 (usuarios red) == True && perteneceUsuario u2 (usuarios red) == True && publicacionesQueLeGustanA red u1 ==publicacionesQueLeGustanA red u2 = True
                                          | otherwise = False
+--Qué hace la función: Se verifica que se cumplan todas las condiciones requeridas por la especificacion, y se le agrega otra, en donde, utilizando al funcion definida por el ejercicio 7, publicacionesQueLeGustanA, se igual dos listas generadas cada una por uno de los 2 usuarios de entrada y al ser iguales, se devuelve un True
 
--- Ejercicio 9
--- describir qué hace la función: 
+-- Ejercicio 9 
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
 tieneUnSeguidorFiel (us,rs,ps) usuario | longitud (todasLasPublicacionesDe ps usuario) > 0 && usuarioMasRepetido (hacerListaDeLikes (todasLasPublicacionesDe (ps) usuario) usuario) == longitud (todasLasPublicacionesDe (ps) usuario) = True
                                        | otherwise = False
- 
+--Qué hace la función:
 
+--Auxiliares--
 hacerListaDeLikes :: [Publicacion] -> Usuario -> [Usuario]
 hacerListaDeLikes [] u = []
 hacerListaDeLikes ((us, pub, like):xs) u| u == us = likesDePublicacion (us,pub,like)++hacerListaDeLikes xs u
@@ -289,13 +292,15 @@ nroDeRepeticiones (x:xs) u | x == u = 1 + nroDeRepeticiones xs u
 
 
 -- Ejercicio 10
--- describir qué hace la función: La funcion verifica los requerimientos de la especificacion, y nos da como resultado un bool. Se genera una nueva lista recortando la de usuarios de la red hasta que empiece y termine con los 2 usuarios que de entrada. Luego, sobre esa lista se aplica cadenadeAmigos y sonDeLaRed para verificar si efectivamente se cumple que el usuario inicial y el siguiente estan relacionados sucesivamente hasta el ultimo, y si los usuarios de la lista pertenecen a la red. Por ultimo, tambien se verifica la longitud de la nueva lista.
+
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
 existeSecuenciaDeAmigos red u1 u2|longitud(amigosDe red u1) ==0 || longitud(amigosDe red u2) ==0 = False
                                  |longitud(amigosDe red u1) >=1 && longitud(compartenAmigo (amigosDe red u1) (amigosDe red u2))>=1 = True
                                  |tripleValidacion red u1 && tripleValidacion red u2 && cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && (longitud (auxSeqDeAmigos (usuarios red) u1 u2) >=2) = True
                                  | otherwise = False
+--Qué hace la función: La funcion verifica los requerimientos de la especificacion, y nos da como resultado un bool. Se genera una nueva lista recortando la de usuarios de la red hasta que empiece y termine con los 2 usuarios que de entrada. Luego, sobre esa lista se aplica cadenadeAmigos y sonDeLaRed para verificar si efectivamente se cumple que el usuario inicial y el siguiente estan relacionados sucesivamente hasta el ultimo, y si los usuarios de la lista pertenecen a la red. Por ultimo, tambien se verifica la longitud de la nueva lista.
 
+--Auxiliares--
 relacionadoDirecto :: Usuario -> Usuario ->RedSocial ->Bool
 relacionadoDirecto u1 u2 (_, [], _) = False  
 relacionadoDirecto u1 u2 (_, rs, _) |perteneceRelacion (u1,u2) rs  == True ||perteneceRelacion (u2,u1) rs == True = True
