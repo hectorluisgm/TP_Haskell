@@ -27,13 +27,13 @@ tests = test [
     " usuarioConMasAmigos 3" ~: expectAny (usuarioConMasAmigos redD) [usuario4],
 
     " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
-    " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True,
-    " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= True,
+    " estaRobertoCarlos 2 con un usuario que lo cumple" ~: (estaRobertoCarlos redC) ~?= True,
+    " estaRobertoCarlos 3 con mas de un usuario que lo cumple" ~: (estaRobertoCarlos redD) ~?= True,
     " estaRobertoCarlos 4 en una red sin relaciones" ~: (estaRobertoCarlos redI) ~?= False,
 
     " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
-    " publicacionesDe 2" ~: (publicacionesDe redC usuario6) ~?= [],
-    " publicacionesDe 3" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5],
+    " publicacionesDe 2 en una red sin publicaciones" ~: (publicacionesDe redC usuario6) ~?= [],
+    " publicacionesDe 3 con muchas publicaciones" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5],
     " publicacionesDe 4 usuario sin publicaciones" ~: (publicacionesDe redE usuario2) ~?= [],
 
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
