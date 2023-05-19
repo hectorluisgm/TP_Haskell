@@ -1,10 +1,7 @@
 import Test.HUnit
 import Solucion
 
-main :: IO ()
-main = putStrLn "Hola, mundo!"
-
-run = runTestTT tests
+main = runTestTT tests
 
 tests = test [
     " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
@@ -51,7 +48,12 @@ tests = test [
     " tieneUnSeguidorFiel 5 ySoloUnaPublicacion" ~: (tieneUnSeguidorFiel redZ usuario3) ~?= True,
     " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False,
 
-    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True
+    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
+    " existeSecuenciaDeAmigos 2 SoloSonAmigosLosUsusariosDelInput" ~: (existeSecuenciaDeAmigos redY usuario1 usuario2) ~?= True,
+    " existeSecuenciaDeAmigos 3 SinRelacionDirectaEntreUsusariosDelInput" ~: (existeSecuenciaDeAmigos redB usuario1 usuario3) ~?= True,
+    " existeSecuenciaDeAmigos 4 NoHayCadenaDeAmigos" ~: (existeSecuenciaDeAmigos redV usuario3 usuario12) ~?= False,
+    " existeSecuenciaDeAmigos 5 SinRelaciones" ~: (existeSecuenciaDeAmigos redI usuario3 usuario10) ~?= False,
+    " existeSecuenciaDeAmigos 6 MismaCantidadDeAmigosEntreSi" ~: (existeSecuenciaDeAmigos redT usuario3 usuario4) ~?= True
  ]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
@@ -98,7 +100,11 @@ relacion4_10 = (usuario10, usuario4)
 relacion4_11 = (usuario11, usuario4)
 relacion4_12 = (usuario12, usuario4)
 
+relacion5_12 = (usuario5, usuario12)
+
 relacion7_5 = (usuario7, usuario5)
+
+relacion12_8 =(usuario12, usuario8)
 
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
@@ -189,3 +195,21 @@ usuariosW = [usuario1, usuario3, usuario5, usuario7]
 relacionesW= [relacion1_3, relacion3_5, relacion3_7, relacion7_5 ]
 publicacionesW= [publicacion3_4, publicacion3_5, publicacion3_6]
 redW = (usuariosW, relacionesW, publicacionesW)
+
+usuariosY = [usuario1, usuario2, usuario3, usuario5]
+relacionesY= [relacion1_2]
+publicacionesY = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
+redY = (usuariosY, relacionesY, publicacionesY)
+
+
+
+usuariosV = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesV = [relacion1_3, relacion2_3, relacion3_4, relacion5_12, relacion12_8]
+publicacionesV = [publicacion1_3, publicacion3_3]
+redV = (usuariosV, relacionesV, publicacionesV)
+
+
+usuariosT = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6,usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesT = [relacion3_4, relacion4_5, relacion4_6, relacion4_7, relacion3_5, relacion3_6, relacion3_7]
+publicacionesT = [publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
+redT= (usuariosT, relacionesT, publicacionesT)

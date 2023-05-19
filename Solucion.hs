@@ -270,7 +270,8 @@ lesGustanLasMismasPublicaciones red u1 u2| redSocialValida red == True && usuari
 tieneUnSeguidorFiel :: RedSocial -> Usuario -> Bool
 tieneUnSeguidorFiel (us,rs,ps) usuario | longitud (todasLasPublicacionesDe ps usuario) > 0 && usuarioMasRepetido (hacerListaDeLikes (todasLasPublicacionesDe (ps) usuario) usuario) == longitud (todasLasPublicacionesDe (ps) usuario) = True
                                        | otherwise = False
---Qué hace la función:
+--Qué hace la función: Esta función recibe una redSocial y un Usuario y evalua si el mismo tiene al menos un usuario de la red que le haya dado like a todas sus publicaciones.
+--Para ello arma una lista de todos los likes que recibieron las publicaciones realizadas por el usuario del input, busca dentro de esta lista al usuario que mas veces se repita, esto quiere decir, que es el usuario que mas likes le dio a las publicaciones, y si el numero de apariciones de este usuario en la lista de likes es igual a la cantidad de posteos del usuario del input, entonces el mismo tiene un seguidor fiel.
 
 --Auxiliares--
 hacerListaDeLikes :: [Publicacion] -> Usuario -> [Usuario]
