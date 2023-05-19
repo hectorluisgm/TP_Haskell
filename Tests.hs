@@ -1,62 +1,73 @@
+module Tests where
 import Test.HUnit
 import Solucion
 
-main = runTestTT tests
+main = runTestTT todosLosTests 
 
-tests = test [
-    " nombresDeUsuarios 1" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
-    " nombresDeUsuarios 2" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"],
-    " nombresDeUsuarios 3" ~: (nombresDeUsuarios redC) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"],
-    " nombresDeUsuarios 4" ~: (nombresDeUsuarios redD) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"],
+todosLosTests = test [testDeNombresDeUsuarios, testDeAmigosDe, testDeCantidadDeAmigos,testDeUsuarioConMasAmigos, testDeEstaRobertoCarlos, testDePublicacionesDe, testDePubliacaionesQueLeGustaA, testDeLesGustanLasMismasPublicaciones, testDeTieneUnSeguidorFiel, testDeExisteSecuenciaDeAmigos]
 
-    " amigosDe 1" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
-    " amigosDe 2" ~: (amigosDe redB usuario3) ~?= [usuario2],
-    " amigosDe 3" ~: (amigosDe redB usuario5) ~?= [],    
-    " amigosDe 4" ~: (amigosDe redB usuario1) ~?= [usuario2],
+testDeNombresDeUsuarios = test [
+    " nombresDeUsuarios 1 test de la catedra" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
+    " nombresDeUsuarios 2 Red con nombres de usuario repetidos pero IDs distintos" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"],
+    " nombresDeUsuarios 3 RedC con muchos mas usuarios" ~: (nombresDeUsuarios redC) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"],
+    " nombresDeUsuarios 4 RedD con la misma cantidad de usuarios pero sin publicaciones" ~: (nombresDeUsuarios redD) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"]]
 
-    " cantidadDeAmigos 1" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
-    " cantidadDeAmigos 2" ~: (cantidadDeAmigos redB usuario3) ~?= 1,
-    " cantidadDeAmigos 3" ~: (cantidadDeAmigos redB usuario5) ~?= 0,
-    " cantidadDeAmigos 4" ~: (cantidadDeAmigos redD usuario4) ~?= 11,
+testDeAmigosDe = test[
+    " amigosDe 1 test de la catedra" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
+    " amigosDe 2 usuario3 con una sola relacion" ~: (amigosDe redB usuario3) ~?= [usuario2],
+    " amigosDe 3 usuario5 con cero relaciones en redB" ~: (amigosDe redB usuario5) ~?= [],    
+    " amigosDe 4 usuario3 con mas de dos relaciones en redC" ~: (amigosDe redC usuario3) ~?= [usuario1, usuario2, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]]
 
-    " usuarioConMasAmigos 1" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
-    " usuarioConMasAmigos 2" ~: expectAny (usuarioConMasAmigos redC) [usuario3],
-    " usuarioConMasAmigos 3" ~: expectAny (usuarioConMasAmigos redD) [usuario4],
+testDeCantidadDeAmigos = test [
+    " cantidadDeAmigos 1 test de la catedra" ~: (cantidadDeAmigos redA usuario1) ~?= 2,
+    " cantidadDeAmigos 2 Usuario con un unico amigo" ~: (cantidadDeAmigos redB usuario3) ~?= 1,
+    " cantidadDeAmigos 3  Usuario sin amigos" ~: (cantidadDeAmigos redB usuario5) ~?= 0,
+    " cantidadDeAmigos 4 Usuario con mas de diez amigos" ~: (cantidadDeAmigos redD usuario4) ~?= 11]
 
-    " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
+testDeUsuarioConMasAmigos = test [
+    " usuarioConMasAmigos 1 test de la catedra" ~: expectAny (usuarioConMasAmigos redA) [usuario2, usuario4],
+    " usuarioConMasAmigos 2 Usuario relacionado con todos los usuarios de la Red" ~: expectAny (usuarioConMasAmigos redC) [usuario3],
+    " usuarioConMasAmigos 3 Usuarios con la misma cantidad de amigos en la redD puede ser uno u otro" ~: expectAny (usuarioConMasAmigos redD) [usuario3,usuario4]]
+
+testDeEstaRobertoCarlos = test [
+    " estaRobertoCarlos 1 test de la catedra" ~: (estaRobertoCarlos redA) ~?= False,
     " estaRobertoCarlos 2 con un usuario que lo cumple" ~: (estaRobertoCarlos redC) ~?= True,
     " estaRobertoCarlos 3 con mas de un usuario que lo cumple" ~: (estaRobertoCarlos redD) ~?= True,
-    " estaRobertoCarlos 4 en una red sin relaciones" ~: (estaRobertoCarlos redI) ~?= False,
+    " estaRobertoCarlos 4 en una red sin relaciones" ~: (estaRobertoCarlos redI) ~?= False]
 
-    " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
+testDePublicacionesDe = test [
+    " publicacionesDe 1 test de la catedra" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
     " publicacionesDe 2 en una red sin publicaciones" ~: (publicacionesDe redC usuario6) ~?= [],
     " publicacionesDe 3 con muchas publicaciones" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5],
-    " publicacionesDe 4 usuario sin publicaciones" ~: (publicacionesDe redE usuario2) ~?= [],
+    " publicacionesDe 4 usuario sin publicaciones" ~: (publicacionesDe redE usuario2) ~?= []]
 
-    " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
-    " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [],
-    " publicacionesQueLeGustanA 3" ~: (publicacionesQueLeGustanA redF usuario4) ~?= [publicacion1_1],
+testDePubliacaionesQueLeGustaA = test [
+    " publicacionesQueLeGustanA 1 test de la catedra" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
+    " publicacionesQueLeGustanA 2 Usuario a que no le gusta ninguna publicacion" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [],
+    " publicacionesQueLeGustanA 3 Usuario con al que le gusta una unica publicacion en la Red" ~: (publicacionesQueLeGustanA redF usuario4) ~?= [publicacion1_1]]
 
-    " lesGustanLasMismasPublicaciones 2" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
-    " lesGustanLasMismasPublicaciones 1" ~: (lesGustanLasMismasPublicaciones redG usuario2 usuario5) ~?= True,
-    " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redC usuario2 usuario4) ~?= False,
+testDeLesGustanLasMismasPublicaciones = test [
+    " lesGustanLasMismasPublicaciones 1 test de la catedra" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " lesGustanLasMismasPublicaciones 2 Usuarios a los que les gustan las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redG usuario2 usuario5) ~?= True,
+    " lesGustanLasMismasPublicaciones 3 Usuarios a los que NO les gustan las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redC usuario2 usuario4) ~?= False]
 
-    " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
-    " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redH usuario1) ~?= False,
+testDeTieneUnSeguidorFiel = test [
+    " tieneUnSeguidorFiel 1 test de la catedra" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
+    " tieneUnSeguidorFiel 2 UsuarioConPublicacionesSinSeguidorFiel" ~: (tieneUnSeguidorFiel redH usuario1) ~?= False,
     " tieneUnSeguidorFiel 3 SinPublicaciones" ~: (tieneUnSeguidorFiel redB usuario5) ~?= False,
     " tieneUnSeguidorFiel 4 sinLikesEnUnaPublicacion" ~: (tieneUnSeguidorFiel redX usuario4) ~?= False,
     " tieneUnSeguidorFiel 5 ySoloUnaPublicacion" ~: (tieneUnSeguidorFiel redZ usuario3) ~?= True,
-    " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False,
+    " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False]
 
-    " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
+testDeExisteSecuenciaDeAmigos = test [
+    " existeSecuenciaDeAmigos 1 test de la catedra" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
     " existeSecuenciaDeAmigos 2 SoloSonAmigosLosUsusariosDelInput" ~: (existeSecuenciaDeAmigos redY usuario1 usuario2) ~?= True,
     " existeSecuenciaDeAmigos 3 SinRelacionDirectaEntreUsusariosDelInput" ~: (existeSecuenciaDeAmigos redB usuario1 usuario3) ~?= True,
     " existeSecuenciaDeAmigos 4 NoHayCadenaDeAmigos" ~: (existeSecuenciaDeAmigos redV usuario3 usuario12) ~?= False,
     " existeSecuenciaDeAmigos 5 SinRelaciones" ~: (existeSecuenciaDeAmigos redI usuario3 usuario10) ~?= False,
     " existeSecuenciaDeAmigos 6 MismaCantidadDeAmigosEntreSi" ~: (existeSecuenciaDeAmigos redT usuario3 usuario4) ~?= True,
     " existeSecuenciaDeAmigos 7 ConUsuariosInvertidos" ~: (existeSecuenciaDeAmigos redB usuario3 usuario1) ~?= True,
-    " existeSecuenciaDeAmigos 8 ConUsuariosDeEntradaIguales" ~: (existeSecuenciaDeAmigos redB usuario1 usuario1) ~?= True
- ]
+    " existeSecuenciaDeAmigos 8 ConUsuariosDeEntradaIguales" ~: (existeSecuenciaDeAmigos redB usuario1 usuario1) ~?= True]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
 
@@ -115,7 +126,7 @@ publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
 publicacion1_6 = (usuario1, "Hola, soy Us1", [usuario3,usuario7])
 publicacion1_7 = (usuario1, "Hola, cómo va'", [usuario5])
-publicacion1_8 = (usuario1, "Hola", [usuario7])
+publicacion1_8 = (usuario1, "Hola", [usuario7])
 
 publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
