@@ -199,7 +199,7 @@ cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == True && usua
                                     | otherwise = error "Red social o Usuario no cumple los requisitos iniciales."
 
 -- Ejercicio 4
--- describir qué hace la función: .....
+-- describir qué hace la función: La función usuarioConMasAmigos mediante una lista que contiene a cada usuario con su respectiva cantidad de amigos, calcula cuál es el número máximo de amigos de aquella lista, una vez obtenido, devuelve el nombre del usuario con su id
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos (us,rs,ps) = maximoDeAmigos (hacerListaAmigosConTupla (us,rs,ps) us)
 
