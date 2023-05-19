@@ -51,9 +51,11 @@ tests = test [
     " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
     " existeSecuenciaDeAmigos 2 SoloSonAmigosLosUsusariosDelInput" ~: (existeSecuenciaDeAmigos redY usuario1 usuario2) ~?= True,
     " existeSecuenciaDeAmigos 3 SinRelacionDirectaEntreUsusariosDelInput" ~: (existeSecuenciaDeAmigos redB usuario1 usuario3) ~?= True,
-    " existeSecuenciaDeAmigos 4 NoHayCadenaDeAmigos" ~: (existeSecuenciaDeAmigos redV usuario3 usuario12) ~?= False,
-    " existeSecuenciaDeAmigos 5 SinRelaciones" ~: (existeSecuenciaDeAmigos redI usuario3 usuario10) ~?= False,
-    " existeSecuenciaDeAmigos 6 MismaCantidadDeAmigosEntreSi" ~: (existeSecuenciaDeAmigos redT usuario3 usuario4) ~?= True
+    " existeSecuenciaDeAmigos 4 ConUsuariosInvertidos" ~: (existeSecuenciaDeAmigos redB usuario3 usuario1) ~?= True,
+    " existeSecuenciaDeAmigos 5 ConUsuariosDeEntradaIguales" ~: (existeSecuenciaDeAmigos redB usuario1 usuario1) ~?= True,
+    " existeSecuenciaDeAmigos 6 NoHayCadenaDeAmigos" ~: (existeSecuenciaDeAmigos redV usuario3 usuario12) ~?= False,
+    " existeSecuenciaDeAmigos 7 SinRelaciones" ~: (existeSecuenciaDeAmigos redI usuario3 usuario10) ~?= False,
+    " existeSecuenciaDeAmigos 8 MismaCantidadDeAmigosEntreSi" ~: (existeSecuenciaDeAmigos redT usuario3 usuario4) ~?= True
  ]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
