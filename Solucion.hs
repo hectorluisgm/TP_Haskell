@@ -221,9 +221,10 @@ maximoDeAmigos (x:y:xs) | segundoElementoUsuario  x > segundoElementoUsuario  y 
                         | otherwise = maximoDeAmigos (y:xs)
 
 
--- describir qué hace la función: .....
 
 --Ejercicio 5
+-- describir qué hace la función: La función estaRobertoCarlos la cual recibe una RedSocial y devuelve un Bool , esta función se apoya sobre 3 funciones auxiliares y una comparación en base si la cantidad de amigos es mayor a 10 , quiere decir que existe Roberto Carlos y nos devuelve un True , de otra forma devuelve un False. Para lograr esto nos apoyamos en la función cantidadDeAmigos ,pero filtramos el usuario al que pasamos como parámetro (el cual pertenece a la RedSocial), con la otra función auxiliar MáximoDeAmigos, la cual nos devuelve el Usuario con más relaciones en toda la RedSocial, por lo tanto si las relaciones de este usuario son mayores a diez se dice que estaRobertoCarlos ósea True.
+
 estaRobertoCarlos :: RedSocial -> Bool
 estaRobertoCarlos (_,[],_) = False
 estaRobertoCarlos ([],_,_) = error "La red social no es valida"
@@ -231,7 +232,7 @@ estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hace
                              | otherwise = False
 
 -- Ejercicio 6
--- describir qué hace la función: .....
+-- describir qué hace la función: La función publicacionesDe recibe un RedSocial y un usuario , el usuario debe pertenecer a la red social para ello usamos un función auxiliar tripleValidacion , donde validamos si el usuario pertenece a la red , si el usuario es válido y por último si la RedSocial pasada es válida, por otro lado esta función usa otra función auxiliar todasLasPublicacionesDe la cual será la que de nuestro retorno, esta función crea un nueva lista con Solo las publicaciones que fueron creadas por el usuario pasado como parámetro, devolviendo así una lista de todas sus publicaciones de la RedSocial.
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
 publicacionesDe (usuarios, relaciones, publicaciones) (id,nombre) | tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) == True = todasLasPublicacionesDe publicaciones (id,nombre)
                                                                     |otherwise =  error "El usuario, relacion o publicacion estan mal definidas"
@@ -243,7 +244,8 @@ todasLasPublicacionesDe (x:xs) (id,nombre) | id == head (hacerListaUsuariosPubli
 
 tripleValidacion :: RedSocial -> Usuario -> Bool
 tripleValidacion (usuarios, relaciones, publicaciones) (id,nombre) | (redSocialValida (usuarios, relaciones, publicaciones) == True) && (usuarioValido (id,nombre) == True) && (perteneceUsuario (id,nombre) (usuarios) == True) = True
-                                                        | otherwise = False
+                                                                    | otherwise = False
+                                                                    
 -- Ejercicio 7
 -- describir qué hace la función: La funcion publicacionQueLeGustanA comienza verificando los requerimientos de la especificacion. En caso de cumplirse devuelve una lista creada por listapublicacionesDeLike, que se genera chequeando que el usuario de entrada pertenezca a los likes de la primera publicacion de la red social, y en caso de cumplirse esa condicion, añade esa primera publicacion a la lista devuelta y chequea las siguientes publicaciones de forma recursiva, hasta recorrer toda la lista. 
 publicacionesQueLeGustanA :: RedSocial -> Usuario -> [Publicacion]
