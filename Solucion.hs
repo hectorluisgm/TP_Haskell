@@ -4,9 +4,9 @@ module Solucion where
 -- Completar con los datos del grupo
 --
 -- Nombre de Grupo: Debuggers
--- Integrante 1: Nombre Apellido, email, LU
--- Integrante 2: Nombre Apellido, email, LU
--- Integrante 3: Nombre Apellido, email, LU
+-- Integrante 1: Ignacio Martin Vittorini Fennema, nachovittfenn@gmail.com, LU 460/20
+-- Integrante 2: Milagros Guadalupe Villagran, milagrosgvillagran@gmail.com, LU 58/21
+-- Integrante 3: Nicolas Cestau, nicocestau@gmail.com, LU 834/23
 -- Integrante 4: Hector Gomez Moya, hectorluisgomezmoya@gmail.com , LU 921/23
 
 type Usuario = (Integer, String) -- (id, nombre)
