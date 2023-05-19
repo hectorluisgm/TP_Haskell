@@ -46,6 +46,10 @@ tests = test [
 
     " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
     " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redH usuario1) ~?= False,
+    " tieneUnSeguidorFiel 3 SinPublicaciones" ~: (tieneUnSeguidorFiel redB usuario5) ~?= False,
+    " tieneUnSeguidorFiel 4 sinLikesEnUnaPublicacion" ~: (tieneUnSeguidorFiel redX usuario4) ~?= False,
+    " tieneUnSeguidorFiel 5 ySoloUnaPublicacion" ~: (tieneUnSeguidorFiel redZ usuario3) ~?= True,
+    " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False,
 
     " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True
  ]
@@ -111,11 +115,15 @@ publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
 publicacion3_1 = (usuario3, "Lorem Ipsum", [])
 publicacion3_2 = (usuario3, "dolor sit amet", [usuario2])
 publicacion3_3 = (usuario3, "consectetur adipiscing elit", [usuario2, usuario5])
+publicacion3_4 = (usuario3, "Lorem Ipsum", [])
+publicacion3_5 = (usuario3, "Lorem Ipsu", [])
+publicacion3_6 = (usuario3, "Lorem Ips", [])
+
 
 publicacion4_1 = (usuario4, "I am Alice. Not", [usuario1, usuario2])
 publicacion4_2 = (usuario4, "I am Bob", [])
 publicacion4_3 = (usuario4, "Just kidding, i am Mariela", [usuario1, usuario3])
-
+publicacion4_4 = (usuario4, "hahaha", [usuario5, usuario6]) 
 
 usuariosA = [usuario1, usuario2, usuario3, usuario4]
 relacionesA = [relacion1_2, relacion1_4, relacion2_3, relacion2_4, relacion3_4]
@@ -164,3 +172,20 @@ usuariosI = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario
 relacionesI = []
 publicacionesI = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redI = (usuariosI, relacionesI, publicacionesI)
+
+usuariosX= [usuario4, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesX = [relacion4_6, relacion4_7, relacion4_8, relacion4_9, relacion4_10, relacion4_11, relacion4_12]
+publicacionesX = [publicacion4_2, publicacion4_4]
+redX = (usuariosX, relacionesX, publicacionesX)
+
+
+usuariosZ = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesZ = [relacion1_3, relacion2_3, relacion3_4, relacion3_5, relacion3_6, relacion3_7, relacion3_8, relacion3_9, relacion3_10, relacion3_11, relacion3_12, relacion1_4, relacion2_4, relacion4_5,  relacion4_7, relacion4_8, relacion4_9, relacion4_10, relacion4_11, relacion4_12]
+publicacionesZ = [publicacion1_7, publicacion3_3, publicacion1_5, publicacion1_6 ]
+redZ = (usuariosZ, relacionesZ, publicacionesZ)
+
+
+usuariosW = [usuario1, usuario3, usuario5, usuario7] 
+relacionesW= [relacion1_3, relacion3_5, relacion3_7, relacion7_5 ]
+publicacionesW= [publicacion3_4, publicacion3_5, publicacion3_6]
+redW = (usuariosW, relacionesW, publicacionesW)
