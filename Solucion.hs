@@ -276,7 +276,7 @@ hacerListaDeLikes ((us, pub, like):xs) u| u == us = likesDePublicacion (us,pub,l
 
 usuarioMasRepetido :: [Usuario] -> Integer
 usuarioMasRepetido [] = 0
-usuarioMasRepetido [x] = 0
+usuarioMasRepetido [x] = 1
 usuarioMasRepetido (x:xs) | nroDeRepeticiones (x:xs) x == nroDeRepeticiones (x:xs) (head(xs)) = usuarioMasRepetido xs
                           | nroDeRepeticiones (x:xs) x < nroDeRepeticiones (x:xs) (head(xs)) = nroDeRepeticiones (x:xs) (head(xs))
                           | otherwise = nroDeRepeticiones (x:xs) x
