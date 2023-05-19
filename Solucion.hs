@@ -3,7 +3,7 @@ module Solucion where
 
 -- Completar con los datos del grupo
 --
--- Nombre de Grupo: xx
+-- Nombre de Grupo: Debuggers
 -- Integrante 1: Nombre Apellido, email, LU
 -- Integrante 2: Nombre Apellido, email, LU
 -- Integrante 3: Nombre Apellido, email, LU
@@ -39,7 +39,7 @@ likesDePublicacion (_, _, us) = us
 
 -- Ejercicios
 
--- describir qué hace la función: .....
+-- describir qué hace la función: nombresDeUsuarios esta funcion recibe una RedSocial y la valida con una funcion RedSocialValida, la cual a su vez valida por separado en funciones auxiliares, los usuarios, las relaciones y las publicaciones. Luego si cumple con la condicion de RedSocialValida=True devuelve una lista con los Nombres de todos los Usuarios en una lista.  
 nombresDeUsuarios :: RedSocial -> [String]
 nombresDeUsuarios redSocial| redSocialValida redSocial == False = error "Red Social no cumple los requisitos"
                            | otherwise = proyectarNombres(usuarios(redSocial))
@@ -169,7 +169,8 @@ proyectarNombres (x:xs) = (nombreDeUsuario(x):proyectarNombres(xs))
 
 -- describir qué hace la función: .....
 amigosDe :: RedSocial -> Usuario -> [Usuario]
-amigosDe (u, r, p) a = quitarRepetidos (listaDeAmigos (u, r, p) a)
+amigosDe (u, r, p) a |listaDeAmigos (u, r, p) a  == [] = [] 
+                     |otherwise =quitarRepetidos (listaDeAmigos (u,r,p) a)
 
 primerElemento :: Relacion -> Usuario
 primerElemento (x, y) = x
@@ -190,53 +191,43 @@ quitarRepetidos (x:xs) | perteneceUsuario x xs == True = quitarRepetidos xs
                        | otherwise = (x: quitarRepetidos xs )
 
 
-primerInteger :: (Integer,Integer) -> Integer
-primerInteger (x,y) = x 
-
-segundoInteger :: (Integer,Integer) -> Integer 
-segundoInteger (x,y) = y
-
 -- describir qué hace la función: .....
 cantidadDeAmigos :: RedSocial -> Usuario -> Integer
-cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == True && usuarioValido usuario == True && perteneceUsuario usuario us == True = auxCantidadDeAmigos (us,rs,ps) usuario 
+cantidadDeAmigos (us,rs,ps) usuario | redSocialValida (us,rs,ps) == True && usuarioValido usuario == True && perteneceUsuario usuario us == True = longitud (amigosDe (us,rs,ps) usuario )
                                     | otherwise = error "Red social o Usuario no cumple los requisitos iniciales."
 
-auxCantidadDeAmigos :: RedSocial -> Usuario -> Integer
-auxCantidadDeAmigos (_,rs,_) usuario = perteneceRelacionInt (idDeUsuario (usuario)) (hacerListaRelacion rs) 
-
-perteneceRelacionInt :: Integer -> [(Integer,Integer)] -> Integer
-perteneceRelacionInt a [] = 0 
-perteneceRelacionInt a (x:xs) | a == primerInteger (x) || a == segundoInteger (x) = 1 + perteneceRelacionInt a xs 
-                                | otherwise = perteneceRelacionInt a xs 
 
 -- describir qué hace la función: .....
 usuarioConMasAmigos :: RedSocial -> Usuario
-usuarioConMasAmigos (us,rs,ps) = maximoDeAmigos (hacerListaAmigos (us,rs,ps) us)
+usuarioConMasAmigos (us,rs,ps) = maximoDeAmigos (hacerListaAmigosConTupla (us,rs,ps) us)
 
-cantidadDeAmigosUsuario :: RedSocial -> Usuario -> (Usuario, Integer)
-cantidadDeAmigosUsuario red usuario = (usuario,cantidadDeAmigos red usuario)
+tuplaCantidadDeAmigosYUsuario :: RedSocial -> Usuario -> (Usuario, Integer)
+tuplaCantidadDeAmigosYUsuario red usuario = (usuario,cantidadDeAmigos red usuario)
 
-hacerListaAmigos ::  RedSocial -> [Usuario] ->  [(Usuario, Integer)]
-hacerListaAmigos red [] = []
-hacerListaAmigos red (x:xs) = cantidadDeAmigosUsuario red x : hacerListaAmigos red xs 
+hacerListaAmigosConTupla ::  RedSocial -> [Usuario] ->  [(Usuario, Integer)]
+hacerListaAmigosConTupla red [] = []
+hacerListaAmigosConTupla red (x:xs) = tuplaCantidadDeAmigosYUsuario red x : hacerListaAmigosConTupla red xs 
 
-primerElementoUsuarioInt :: (Usuario, Integer) ->  Usuario
-primerElementoUsuarioInt (us, int) = us
+primerElementoUsuario :: (Usuario, Integer) ->  Usuario
+primerElementoUsuario (us, int) = us
 
-segundoElementoUsuarioInt :: (Usuario, Integer) -> Integer
-segundoElementoUsuarioInt (us, int) = int
+segundoElementoUsuario :: (Usuario, Integer) -> Integer
+segundoElementoUsuario (us, int) = int
 
 maximoDeAmigos :: [(Usuario, Integer)] -> Usuario
-maximoDeAmigos [x] = primerElementoUsuarioInt  x
-maximoDeAmigos (x:y:xs) | segundoElementoUsuarioInt  x > segundoElementoUsuarioInt  y = maximoDeAmigos (x:xs)
+maximoDeAmigos [x] = primerElementoUsuario  x
+maximoDeAmigos (x:y:xs) | segundoElementoUsuario  x > segundoElementoUsuario  y = maximoDeAmigos (x:xs)
                         | otherwise = maximoDeAmigos (y:xs)
 
--- describir qué hace la función: .....
-estaRobertoCarlos :: RedSocial -> Bool
-estaRobertoCarlos ([],[],_) = False
-estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hacerListaAmigos (us,rs,ps) us)) > 10 = True
-                                | otherwise = False
 
+-- describir qué hace la función: .....
+
+--Ejercicio 5
+estaRobertoCarlos :: RedSocial -> Bool
+estaRobertoCarlos (_,[],_) = False
+estaRobertoCarlos ([],_,_) = error "La red social no es valida"
+estaRobertoCarlos (us,rs,ps) | cantidadDeAmigos (us,rs,ps) (maximoDeAmigos (hacerListaAmigosConTupla (us,rs,ps) us)) > 10 = True
+                             | otherwise = False
 
 -- describir qué hace la función: .....
 publicacionesDe :: RedSocial -> Usuario -> [Publicacion]
@@ -281,9 +272,9 @@ hacerListaDeLikes ((us, pub, like):xs) u| u == us = likesDePublicacion (us,pub,l
 usuarioMasRepetido :: [Usuario] -> Integer
 usuarioMasRepetido [] = error "Lista Vacia"
 usuarioMasRepetido [x] = 0
-usuarioMasRepetido (x:y:xs) | (nroDeRepeticiones (x:xs) x) >= (nroDeRepeticiones (x:xs) y) =  1 + usuarioMasRepetido (x:xs)
-                            | otherwise = usuarioMasRepetido (y:xs)
-
+usuarioMasRepetido (x:xs) | nroDeRepeticiones (x:xs) x == nroDeRepeticiones (x:xs) (head(xs)) = usuarioMasRepetido xs
+                          | nroDeRepeticiones (x:xs) x < nroDeRepeticiones (x:xs) (head(xs)) = nroDeRepeticiones (x:xs) (head(xs))
+                          | otherwise = nroDeRepeticiones (x:xs) x
 
 nroDeRepeticiones :: [Usuario] -> Usuario -> Integer
 nroDeRepeticiones [] u = 0

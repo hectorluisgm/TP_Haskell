@@ -29,10 +29,12 @@ tests = test [
     " estaRobertoCarlos 1" ~: (estaRobertoCarlos redA) ~?= False,
     " estaRobertoCarlos 2" ~: (estaRobertoCarlos redC) ~?= True,
     " estaRobertoCarlos 3" ~: (estaRobertoCarlos redD) ~?= True,
+    " estaRobertoCarlos 4 en una red sin relaciones" ~: (estaRobertoCarlos redI) ~?= False,
 
     " publicacionesDe 1" ~: (publicacionesDe redA usuario2) ~?= [publicacion2_1, publicacion2_2],
     " publicacionesDe 2" ~: (publicacionesDe redC usuario6) ~?= [],
     " publicacionesDe 3" ~: (publicacionesDe redE usuario1) ~?= [publicacion1_2, publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5],
+    " publicacionesDe 4 usuario sin publicaciones" ~: (publicacionesDe redE usuario2) ~?= [],
 
     " publicacionesQueLeGustanA 1" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
     " publicacionesQueLeGustanA 2" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [],
@@ -43,6 +45,7 @@ tests = test [
     " lesGustanLasMismasPublicaciones 3" ~: (lesGustanLasMismasPublicaciones redC usuario2 usuario4) ~?= False,
 
     " tieneUnSeguidorFiel 1" ~: (tieneUnSeguidorFiel redA usuario1) ~?= True,
+    " tieneUnSeguidorFiel 2" ~: (tieneUnSeguidorFiel redH usuario1) ~?= False,
 
     " existeSecuenciaDeAmigos 1" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True
  ]
@@ -91,12 +94,16 @@ relacion4_10 = (usuario10, usuario4)
 relacion4_11 = (usuario11, usuario4)
 relacion4_12 = (usuario12, usuario4)
 
+relacion7_5 = (usuario7, usuario5)
 
 publicacion1_1 = (usuario1, "Este es mi primer post", [usuario2, usuario4])
 publicacion1_2 = (usuario1, "Este es mi segundo post", [usuario4])
 publicacion1_3 = (usuario1, "Este es mi tercer post", [usuario2, usuario5])
 publicacion1_4 = (usuario1, "Este es mi cuarto post", [])
 publicacion1_5 = (usuario1, "Este es como mi quinto post", [usuario5])
+publicacion1_6 = (usuario1, "Hola, soy Us1", [usuario3,usuario7])
+publicacion1_7 = (usuario1, "Hola, cómo va'", [usuario5])
+publicacion1_8 = (usuario1, "Hola", [usuario7])
 
 publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
@@ -148,3 +155,12 @@ relacionesG = [relacion1_3, relacion2_3, relacion3_4, relacion3_5, relacion3_6, 
 publicacionesG = [publicacion1_3, publicacion3_3]
 redG = (usuariosG, relacionesG, publicacionesG)
 
+usuariosH = [usuario1, usuario3, usuario5, usuario7]
+relacionesH= [relacion1_3, relacion3_5, relacion3_7, relacion7_5 ]
+publicacionesH= [publicacion1_5, publicacion1_6, publicacion1_7, publicacion1_8]
+redH = (usuariosH, relacionesH, publicacionesH)
+
+usuariosI = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6, usuario7, usuario8, usuario9, usuario10, usuario11, usuario12]
+relacionesI = []
+publicacionesI = [publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
+redI = (usuariosI, relacionesI, publicacionesI)
