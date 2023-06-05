@@ -8,9 +8,9 @@ todosLosTests = test [testDeNombresDeUsuarios, testDeAmigosDe, testDeCantidadDeA
 
 testDeNombresDeUsuarios = test [
     " nombresDeUsuarios 1 test de la catedra" ~: (nombresDeUsuarios redA) ~?= ["Juan","Natalia","Pedro","Mariela"],
-    " nombresDeUsuarios 2 Red con nombres de usuario repetidos pero IDs distintos" ~: (nombresDeUsuarios redB) ~?= ["Juan","Natalia","Pedro","Natalia"],
-    " nombresDeUsuarios 3 RedC con muchos mas usuarios" ~: (nombresDeUsuarios redC) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"],
-    " nombresDeUsuarios 4 RedD con la misma cantidad de usuarios pero sin publicaciones" ~: (nombresDeUsuarios redD) ~?= ["Juan","Natalia","Pedro","Mariela", "Natalia", "Jose", "Hector", "Ignacio", "Milagros", "Nicolas", "Nicolas", "Nicolas"]]
+    " nombresDeUsuarios 2 Red con nombres de usuario repetidos pero IDs distintos" ~: (nombresDeUsuarios redB) ~?= ["Juan","Pedro","Natalia"],
+    " nombresDeUsuarios 3 RedC con muchos mas usuarios" ~: (nombresDeUsuarios redC) ~?= ["Juan","Pedro","Mariela","Natalia","Jose","Hector","Ignacio","Milagros","Nicolas"],
+    " nombresDeUsuarios 4 RedD con la misma cantidad de usuarios pero sin publicaciones" ~: (nombresDeUsuarios redD) ~?= ["Juan","Pedro","Mariela","Natalia","Jose","Hector","Ignacio","Milagros","Nicolas"]]
 
 testDeAmigosDe = test[
     " amigosDe 1 test de la catedra" ~: (amigosDe redA usuario1) ~?= [usuario2, usuario4],
@@ -43,11 +43,11 @@ testDePublicacionesDe = test [
 
 testDePubliacaionesQueLeGustaA = test [
     " publicacionesQueLeGustanA 1 test de la catedra" ~: (publicacionesQueLeGustanA redA usuario1) ~?= [publicacion2_2, publicacion4_1],
-    " publicacionesQueLeGustanA 2 Usuario a que no le gusta ninguna publicacion" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [],
+    " publicacionesQueLeGustanA 2 Usuario a que se da like a sus propias publicaciones" ~: (publicacionesQueLeGustanA redA usuario3) ~?= [((3,"Pedro"),"Lorem Ipsum",[(3,"Pedro")]),((3,"Pedro"),"dolor sit amet",[(2,"Natalia"),(3,"Pedro")])],
     " publicacionesQueLeGustanA 3 Usuario con al que le gusta una unica publicacion en la Red" ~: (publicacionesQueLeGustanA redF usuario4) ~?= [publicacion1_1]]
 
 testDeLesGustanLasMismasPublicaciones = test [
-    " lesGustanLasMismasPublicaciones 1 test de la catedra" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= True,
+    " lesGustanLasMismasPublicaciones 1 Usuarios que NO le gustan las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redB usuario1 usuario3) ~?= False,
     " lesGustanLasMismasPublicaciones 2 Usuarios a los que les gustan las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redG usuario2 usuario5) ~?= True,
     " lesGustanLasMismasPublicaciones 3 Usuarios a los que NO les gustan las mismas publicaciones" ~: (lesGustanLasMismasPublicaciones redC usuario2 usuario4) ~?= False]
 
@@ -57,7 +57,9 @@ testDeTieneUnSeguidorFiel = test [
     " tieneUnSeguidorFiel 3 SinPublicaciones" ~: (tieneUnSeguidorFiel redB usuario5) ~?= False,
     " tieneUnSeguidorFiel 4 sinLikesEnUnaPublicacion" ~: (tieneUnSeguidorFiel redX usuario4) ~?= False,
     " tieneUnSeguidorFiel 5 ySoloUnaPublicacion" ~: (tieneUnSeguidorFiel redZ usuario3) ~?= True,
-    " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False]
+    " tieneUnSeguidorFiel 6 sinLikesEnTodasSusPublicaciones" ~: (tieneUnSeguidorFiel redW usuario3) ~?= False,
+    " tieneUnSeguidorFiel 7 Usuario que se dio like a todas sus publicaciones" ~: (tieneUnSeguidorFiel redC usuario3) ~?= False]
+
 
 testDeExisteSecuenciaDeAmigos = test [
     " existeSecuenciaDeAmigos 1 test de la catedra" ~: (existeSecuenciaDeAmigos redA usuario1 usuario3) ~?= True,
@@ -131,9 +133,9 @@ publicacion1_8 = (usuario1, "Hola", [usuario7])
 publicacion2_1 = (usuario2, "Hello World", [usuario4])
 publicacion2_2 = (usuario2, "Good Bye World", [usuario1, usuario4])
 
-publicacion3_1 = (usuario3, "Lorem Ipsum", [])
-publicacion3_2 = (usuario3, "dolor sit amet", [usuario2])
-publicacion3_3 = (usuario3, "consectetur adipiscing elit", [usuario2, usuario5])
+publicacion3_1 = (usuario3, "Lorem Ipsum", [usuario3])
+publicacion3_2 = (usuario3, "dolor sit amet", [usuario2,usuario3])
+publicacion3_3 = (usuario3, "consectetur adipiscing elit", [usuario2, usuario3, usuario5])
 publicacion3_4 = (usuario3, "Lorem Ipsum", [])
 publicacion3_5 = (usuario3, "Lorem Ipsu", [])
 publicacion3_6 = (usuario3, "Lorem Ips", [])
