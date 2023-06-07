@@ -60,118 +60,11 @@ proyectarNombres [] = []
 proyectarNombres (x:xs) = quitarRepetidos ( (nombreDeUsuario x) : proyectarNombres xs)
 
 
--- noHayIdsRepetidos :: [Usuario] -> Bool
--- noHayIdsRepetidos [] = True
--- noHayIdsRepetidos (x:xs) | pertenece (idDeUsuario x) (hacerLista xs) = False
---                          | otherwise = noHayIdsRepetidos xs
-
- 
--- hacerLista:: [Usuario] -> [Integer]
--- hacerLista [] = []
--- hacerLista (x:xs) = idDeUsuario (x) : hacerLista (xs)
-
-
--- pertenece :: Integer -> [Integer] -> Bool
--- pertenece a [] = False
--- pertenece a (x:xs) | a == x = True 
---                    | otherwise = pertenece a xs
-
--- usuarioValido :: Usuario -> Bool
--- usuarioValido a  | idDeUsuario a > 0 && longitud (nombreDeUsuario a) > 0 = True
---                  | otherwise = False
-
-
--- usuariosValidos :: [Usuario] -> Bool
--- usuariosValidos [] = True
--- usuariosValidos (x:xs) | noHayIdsRepetidos (x:xs) == True && usuarioValido x == True = usuariosValidos (xs)
---                        | otherwise = False
-
--- hacerListaRelacion:: [Relacion] -> [(Integer, Integer)]
--- hacerListaRelacion [] = []
--- hacerListaRelacion (x:xs) = ((idDeUsuario(primerElemento (x)), (idDeUsuario(segundoElemento(x)))): hacerListaRelacion(xs))
-
-
 perteneceUsuario :: Usuario -> [Usuario] -> Bool
 perteneceUsuario a [] = False
 perteneceUsuario a (x:xs) | a == x = True 
                           | otherwise = perteneceUsuario a xs
 
-perteneceRelacion :: (Relacion) -> [Relacion] -> Bool
-perteneceRelacion a [] = False
-perteneceRelacion a (x:xs) | a == x = True 
-                           | otherwise = perteneceRelacion a xs
-
--- perteneceTupla:: (Integer, Integer) -> [(Integer,Integer)] -> Bool
--- perteneceTupla a [] = False
--- perteneceTupla a (x:xs) | a == x = True 
---                    | otherwise = perteneceTupla a xs
-
--- relacionesValidas :: [Usuario] -> [Relacion] -> Bool
--- relacionesValidas [] (y:ys) = False
--- relacionesValidas (x:xs) [] = True
--- relacionesValidas (x:xs) (y:ys)|usuariosDeRelacionesValidos (x:xs) (y:ys) == True && relacionesAsimetricas (y:ys) == True && noHayRelacionesRepetidas (y:ys) == True = True
---                                |otherwise = False
-                               
--- usuariosDeRelacionesValidos :: [Usuario] -> [Relacion] -> Bool
--- usuariosDeRelacionesValidos (x:xs) [] = True
--- usuariosDeRelacionesValidos [] (y:ys) = False
--- usuariosDeRelacionesValidos (x:xs) (y:ys) | primerElemento (y) == segundoElemento (y) || perteneceUsuario (primerElemento (y)) ((x:xs)) == False || perteneceUsuario (segundoElemento (y)) ((x:xs)) == False = False
---                                           | otherwise = usuariosDeRelacionesValidos (x:xs) ys
-
--- relacionesAsimetricas :: [Relacion] -> Bool
--- relacionesAsimetricas [] = True
--- relacionesAsimetricas (x:xs) | perteneceRelacion ((segundoElemento (x), primerElemento (x))) (x:xs) == True = False
---                              |otherwise = relacionesAsimetricas xs
-
--- noHayRelacionesRepetidas :: [Relacion] -> Bool
--- noHayRelacionesRepetidas [] = True
--- noHayRelacionesRepetidas (x:xs) | perteneceTupla (idDeUsuario (primerElemento (x)), idDeUsuario(segundoElemento(x))) (hacerListaRelacion xs) == True =False
---                                 | otherwise = noHayRelacionesRepetidas (xs)
-
--- usuariosDePublicacionSonUsuariosDeRed :: [Usuario] -> [Publicacion] -> Bool
--- usuariosDePublicacionSonUsuariosDeRed [] (y:ys) = False
--- usuariosDePublicacionSonUsuariosDeRed (x:xs) [] = True
--- usuariosDePublicacionSonUsuariosDeRed (x:xs) ((usuario, _, _):ys) | perteneceUsuario (usuario) (x:xs) == False = False
---                                                                   | otherwise = usuariosDePublicacionSonUsuariosDeRed (x:xs) ys
-
--- usuariosDeLikeDePublicacionSonUsuariosDeRed :: [Usuario] -> [Publicacion] -> Bool
--- usuariosDeLikeDePublicacionSonUsuariosDeRed [] (y:ys) = False
--- usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) [] = True
--- usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) ((_,_,usuarios):ys) | usuariosLikeValidos (x:xs) (usuarios) == False = False
---                                                                        | otherwise = usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) ys
-
--- usuariosLikeValidos :: [Usuario] -> [Usuario] -> Bool
--- usuariosLikeValidos [] (x:xs) = False
--- usuariosLikeValidos usuarios [] = True
--- usuariosLikeValidos usuarios (x:xs) | perteneceUsuario x usuarios == True = usuariosLikeValidos usuarios xs                                  
---                                     | otherwise = False
-
--- hacerListaUsuariosPublicaciones:: [Publicacion] -> [Integer]
--- hacerListaUsuariosPublicaciones [] = []
--- hacerListaUsuariosPublicaciones ((us, _, _):xs) = (idDeUsuario(us): hacerListaUsuariosPublicaciones(xs))
-
--- hacerListaPublicaciones:: [Publicacion] -> [String]
--- hacerListaPublicaciones [] = []
--- hacerListaPublicaciones ((_, publicacion, _):xs) = ((publicacion): hacerListaPublicaciones(xs))
-
-
-
--- noHayPublicacionesRepetidas :: [Publicacion] -> Bool
--- noHayPublicacionesRepetidas [] = True
--- noHayPublicacionesRepetidas ((usuario,publicacion,_):xs)| pertenece (idDeUsuario(usuario)) (hacerListaUsuariosPublicaciones(xs)) == True && perteneceString (publicacion) (hacerListaPublicaciones(xs)) ==True =False
---                                                         |otherwise = noHayPublicacionesRepetidas (xs)   
-
--- publicacionesValidas :: [Usuario] -> [Publicacion] -> Bool
--- publicacionesValidas (x:xs) [] = True
--- publicacionesValidas [] (y:ys) = False
--- publicacionesValidas (x:xs) (y:ys) | usuariosDePublicacionSonUsuariosDeRed (x:xs) (y:ys)==True && usuariosDeLikeDePublicacionSonUsuariosDeRed (x:xs) (y:ys)==True && noHayPublicacionesRepetidas (y:ys)==True = True
---                                    |otherwise = False
-
--- redSocialValida :: RedSocial -> Bool
--- redSocialValida ([], _, _) = False
--- redSocialValida (usuarios, relaciones, publicaciones) | usuariosValidos usuarios == True && relacionesValidas (usuarios) (relaciones) == True && publicacionesValidas (usuarios) (publicaciones) == True = True
---                                                       | otherwise = False
-                                                      
 
 -- Ejercicio 2
 amigosDe :: RedSocial -> Usuario -> [Usuario]
@@ -200,8 +93,6 @@ longitud [] = 0
 longitud (_:xs) = 1 + longitud xs
 
 -- Ejercicio 4
-
-
 usuarioConMasAmigos :: RedSocial -> Usuario
 usuarioConMasAmigos ([u],_,_) = u
 usuarioConMasAmigos ((x:y:xs),rs,ps) | (cantidadDeAmigos ((x:y:xs),rs,ps) x) > (cantidadDeAmigos ((x:y:xs),rs,ps) y) = usuarioConMasAmigos ((x:xs),rs,ps)
@@ -257,58 +148,19 @@ auxSeguidorFiel (y:ys) (x:xs) usuario | (usuario /= x) && perteneceUsuario x (li
 -- Ejercicio 10
 
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
-existeSecuenciaDeAmigos red u1 u2|longitud(amigosDe red u1) ==0 || longitud(amigosDe red u2) ==0 = False
-                                 |longitud(amigosDe red u1) >=1 && longitud(compartenAmigo (amigosDe red u1) (amigosDe red u2))>=1 = True
-                                 |cadenaDeAmigos (auxSeqDeAmigos (usuarios red) u1 u2) red == True && sonDeLaRed red (auxSeqDeAmigos (usuarios red) u1 u2) == True && (longitud (auxSeqDeAmigos (usuarios red) u1 u2) >=2) = True
-                                 | otherwise = False
+existeSecuenciaDeAmigos red u1 u2  | longitud(amigosDe red u1) ==  0 || longitud(amigosDe red u2) == 0 = False
+                                    | u1 == u2 && longitud(amigosDe red u1) >= 1 = True
+                                    | perteneceUsuario u2 (amigosDe red u1) = True
+                                    | perteneceUsuario u2 (yaVistos red (amigosDe red u1) u2) = True
+                                    | otherwise = False
 --Qué hace la función: La funcion verifica los requerimientos de la especificacion, y nos da como resultado un bool. Se genera una nueva lista recortando la de usuarios de la red hasta que empiece y termine con los 2 usuarios que de entrada. Luego, sobre esa lista se aplica cadenadeAmigos y sonDeLaRed para verificar si efectivamente se cumple que el usuario inicial y el siguiente estan relacionados sucesivamente hasta el ultimo, y si los usuarios de la lista pertenecen a la red. Por ultimo, tambien se verifica la longitud de la nueva lista.
 
+
+
 --Auxiliares--
-relacionadoDirecto :: Usuario -> Usuario ->RedSocial ->Bool
-relacionadoDirecto u1 u2 (_, [], _) = False  
-relacionadoDirecto u1 u2 (_, rs, _) |perteneceRelacion (u1,u2) rs  == True ||perteneceRelacion (u2,u1) rs == True = True
-                                    |otherwise = False 
-
-compartenAmigo :: [Usuario] -> [Usuario] -> [Usuario]
-compartenAmigo [] amigosu2 = []
-compartenAmigo (x:xs) amigosu2| perteneceUsuario x amigosu2 == True = (x:compartenAmigo xs amigosu2)
-compartenAmigo (x:xs) amigosu2| otherwise = compartenAmigo xs amigosu2
-
-cadenaDeAmigos :: [Usuario] -> RedSocial ->Bool
-cadenaDeAmigos [] red= False
-cadenaDeAmigos [x] red = False
-cadenaDeAmigos [x, y] red| relacionadoDirecto x y red == True = True
-cadenaDeAmigos (x:y:xs) red | relacionadoDirecto x y red == True = cadenaDeAmigos (y:xs) red
-                             | otherwise = False
-
-empiezaConDeUsuarios :: [Usuario] -> Usuario
-empiezaConDeUsuarios [] = error "No hay usuarios en la lista"
-empiezaConDeUsuarios [x] = x
-empiezaConDeUsuarios listadeusuarios=head(listadeusuarios)
-
-terminaConDeUsuarios :: [Usuario] -> Usuario
-terminaConDeUsuarios [] = error "No hay usuarios en la lista"
-terminaConDeUsuarios [x] = x
-terminaConDeUsuarios (_:xs)=terminaConDeUsuarios xs
-
-sonDeLaRed :: RedSocial -> [Usuario] ->Bool
-sonDeLaRed red [] = True
-sonDeLaRed red (x:xs)| perteneceUsuario x (usuarios red) == True = sonDeLaRed red xs
-                            | otherwise = False
-
-sacaUltimoUsuario :: [Usuario] -> [Usuario] 
-sacaUltimoUsuario [] = []
-sacaUltimoUsuario [x] = []
-sacaUltimoUsuario (x:xs) = x : sacaUltimoUsuario xs
-
-sacaPrimero :: [Usuario] -> [Usuario]
-sacaPrimero [] = []
-sacaPrimero (x:xs) = xs
-
-
-auxSeqDeAmigos :: [Usuario] -> Usuario -> Usuario -> [Usuario]
-auxSeqDeAmigos [] u1 u2 = []
-auxSeqDeAmigos (x:y:xs) u1 u2| x /= u1 && terminaConDeUsuarios (y:xs) /= u2 =auxSeqDeAmigos (sacaPrimero (sacaUltimoUsuario (x:y:xs))) u1 u2
-                             | x == u1 && terminaConDeUsuarios(y:xs) /= u2 = [x] ++ auxSeqDeAmigos (sacaUltimoUsuario (y:xs)) y u2
-                             | x /= u1 && terminaConDeUsuarios(y:xs) == u2 = auxSeqDeAmigos (sacaPrimero (x:y:xs)) u1 u2
-                             | x == u1 && terminaConDeUsuarios (y:xs) == u2 = (x:y:xs)
+-- La lista de usuarios que recibe yaVistos sera la lista de amigosDe U1 llamada en la funcion principal
+-- El usuario sera el U2 pasado por parametro en la funcion principal
+yaVistos :: RedSocial -> [Usuario] -> Usuario -> [Usuario]
+yaVistos red [] u = []
+yaVistos red (x:xs) u | perteneceUsuario u (amigosDe red x) = amigosDe red x
+                        | otherwise = amigosDe red x ++ yaVistos red xs u
