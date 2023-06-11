@@ -70,8 +70,8 @@ testDeExisteSecuenciaDeAmigos = test [
     " existeSecuenciaDeAmigos 6 MismaCantidadDeAmigosEntreSi" ~: (existeSecuenciaDeAmigos redT usuario3 usuario4) ~?= True,
     " existeSecuenciaDeAmigos 7 ConUsuariosInvertidos" ~: (existeSecuenciaDeAmigos redB usuario3 usuario1) ~?= True,
     " existeSecuenciaDeAmigos 8 ConUsuariosDeEntradaIguales" ~: (existeSecuenciaDeAmigos redB usuario1 usuario1) ~?= True,
-    " existeSecuenciaDeAmigos 10 Usuario con Ninguna Relacion, se relaciona con el mismo" ~: (existeSecuenciaDeAmigos redB usuario5 usuario5) ~?= False
-    ]
+    " existeSecuenciaDeAmigos 10 Usuario con Ninguna Relacion, se relaciona con el mismo" ~: (existeSecuenciaDeAmigos redB usuario5 usuario5) ~?= False,
+    " existeSecuenciaDeAmigos 11 cadenaDeAmigosExtensa_CadaUsuarioTiene1Amigo" ~: (existeSecuenciaDeAmigos redR usuario1 usuario5) ~?= True]
 
 expectAny actual expected = elem actual expected ~? ("expected any of: " ++ show expected ++ "\n but got: " ++ show actual)
 
@@ -230,3 +230,8 @@ usuariosT = [usuario1, usuario2, usuario3, usuario4, usuario5, usuario6,usuario7
 relacionesT = [relacion3_4, relacion4_5, relacion4_6, relacion4_7, relacion3_5, relacion3_6, relacion3_7]
 publicacionesT = [publicacion1_1, publicacion1_3, publicacion1_4, publicacion1_5, publicacion3_1, publicacion3_2, publicacion3_3]
 redT= (usuariosT, relacionesT, publicacionesT)
+
+usuariosR = [usuario1, usuario2, usuario3, usuario4, usuario5]
+relacionesR = [relacion1_2, relacion2_3, relacion3_4, relacion4_5]
+publicacionesR = []
+redR= (usuariosR, relacionesR, publicacionesR)
