@@ -147,7 +147,7 @@ auxSeguidorFiel (y:ys) (x:xs) usuario | (usuario /= x) && perteneceUsuario x (li
 
 -- Ejercicio 10
 
-existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario ->Bool
+existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
 existeSecuenciaDeAmigos red u1 u2  | longitud(amigosDe red u1) ==  0 || longitud(amigosDe red u2) == 0 = False
                                     | u1 == u2 && longitud(amigosDe red u1) >= 1 = True
                                     | perteneceUsuario u2 (amigosDe red u1) = True
