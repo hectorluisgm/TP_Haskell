@@ -150,17 +150,23 @@ auxSeguidorFiel (y:ys) (x:xs) usuario | (usuario /= x) && perteneceUsuario x (li
 existeSecuenciaDeAmigos :: RedSocial -> Usuario -> Usuario -> Bool
 existeSecuenciaDeAmigos red u1 u2  | longitud(amigosDe red u1) ==  0 || longitud(amigosDe red u2) == 0 = False
                                     | u1 == u2 && longitud(amigosDe red u1) >= 1 = True
-                                    | perteneceUsuario u2 (amigosDe red u1) = True
-                                    | perteneceUsuario u2 (yaVistos red (amigosDe red u1) u2) = True
+                                    | perteneceUsuario u2 (buscaCamino red (amigosDe red u1) u2 []) = True
                                     | otherwise = False
---Qué hace la función: La funcion verifica los requerimientos de la especificacion, y nos da como resultado un bool. Se genera una nueva lista recortando la de usuarios de la red hasta que empiece y termine con los 2 usuarios que de entrada. Luego, sobre esa lista se aplica cadenadeAmigos y sonDeLaRed para verificar si efectivamente se cumple que el usuario inicial y el siguiente estan relacionados sucesivamente hasta el ultimo, y si los usuarios de la lista pertenecen a la red. Por ultimo, tambien se verifica la longitud de la nueva lista.
-
+--Qué hace la función: La funcion utiliza la auxiliar buscaCamino, la cual puede tener dos posibilidades. En caso de que exista una cadena de amigos, nos da los amigosDe del ultimo usuario analizado, en el cual si se el encuentra usuario final (input) de la cadena, existeSecuencia dará True. La segunda posibilidad es que recorra todos los usuarios posibles, agregandolos a la lista de yaVistos, y cuando no haya mas usuarios disponibles que no esten en yaVistos, nos dé la lista "amigosDe" del mismo, esté o no el usuarioFinal; en caso que no esté, existeSecuencia da False.
 
 
 --Auxiliares--
--- La lista de usuarios que recibe yaVistos sera la lista de amigosDe U1 llamada en la funcion principal
+-- La lista de usuarios que recibe buscaCamino sera la lista de amigosDe U1 llamada en la funcion principal
 -- El usuario sera el U2 pasado por parametro en la funcion principal
-yaVistos :: RedSocial -> [Usuario] -> Usuario -> [Usuario]
-yaVistos red [] u = []
-yaVistos red (x:xs) u | perteneceUsuario u (amigosDe red x) = amigosDe red x
-                        | otherwise = amigosDe red x ++ yaVistos red xs u
+buscaCamino :: RedSocial -> [Usuario] -> Usuario -> [Usuario] -> [Usuario]
+buscaCamino red [] u _= []
+buscaCamino red (x:xs) u yaVistos | perteneceUsuario u (x:xs) = (x:xs)
+                                  | perteneceUsuario u (amigosDe red x) == False && not (perteneceUsuario x yaVistos ) = buscaCamino red (quitarUsersRepetidos(xs++ (amigosDe red x))) u ([x] ++ yaVistos)
+                                  | perteneceUsuario x yaVistos = buscaCamino red xs u yaVistos
+                                  | otherwise = amigosDe red x
+
+quitarUsersRepetidos :: [Usuario] -> [Usuario]
+quitarUsersRepetidos [] = []
+quitarUsersRepetidos [a] = [a]
+quitarUsersRepetidos (x:xs) | perteneceUsuario x xs = quitarUsersRepetidos xs
+                            | otherwise = x : quitarUsersRepetidos xs
