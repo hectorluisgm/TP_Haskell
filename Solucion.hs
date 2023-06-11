@@ -156,7 +156,7 @@ existeSecuenciaDeAmigos red u1 u2   | longitud(amigosDe red u1) ==  0 || longitu
 
 
 --Auxiliares--
--- La lista de usuarios que recibe yaVistos sera la lista de amigosDe U1 llamada en la funcion principal
+-- La lista de usuarios que recibe buscaCamino sera la lista de amigosDe U1 llamada en la funcion principal
 -- El usuario sera el U2 pasado por parametro en la funcion principal
 buscaCamino :: RedSocial -> [Usuario] -> Usuario -> [Usuario] -> [Usuario]
 buscaCamino red [] u _= []
